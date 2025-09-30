@@ -1,1 +1,3 @@
-export const sheetsController = {}
+const sheetsController = {}
+
+module.exports = sheetsController;
