@@ -1,5 +1,11 @@
 require('dotenv').config();
-const conncetion = require('./data/db')
+const cors = require('cors');
+const authRouter = require('./routers/authRouter')
+const exercisesRouter= require('./routers/exercisesRouter')
+const progressRouter = require('./routers/progressRouter')
+const sheetsRouter = require('./routers/sheetsRouter')
+
+const connection = require('./data/db')
 const port = process.env.DB_PORT || 5000;
 const express = require('express')
 const app = express()
@@ -11,6 +17,10 @@ app.use(cors({
 app.use(express.static('public'));
 app.use(express.json())
 
+app.use('/auth', authRouter)
+app.use('/sheets', sheetsRouter)
+app.use('/exercises', exercisesRouter)
+app.use('/progress', progressRouter)
 
 app.get('/', (req, res) => {
     res.send("server attivo e pronto")

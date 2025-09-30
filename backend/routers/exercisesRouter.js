@@ -6,3 +6,5 @@ const router = express.Router()
 router.get('/', (req, res) => {
     res.send({message: "exercises route funzionante"})
 })
+
+module.exports = router
