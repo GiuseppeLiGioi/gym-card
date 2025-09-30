@@ -1,11 +1,10 @@
-import express from 'express';
-import { authController } from '../controllers/authController';
+const express = Require('express')
+const authController = Require ('../controllers/authController')
 
-const router = express.Router();
+const router = express.Router()
 
-// Rotta generica solo per verificare il corretto funzionamento.
-router.get('/', (req, res) => {
-    res.json({ message: 'Auth route funzionante' });
-});
+router.get('/',(req, res) => {
+    res.send({message: "auth route funzionante"})
+})
 
-export default router;
+module.exports = router;
