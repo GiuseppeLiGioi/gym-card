@@ -6,7 +6,7 @@ const progressRouter = require('./routers/progressRouter')
 const sheetsRouter = require('./routers/sheetsRouter')
 
 const connection = require('./data/db')
-const port = process.env.DB_PORT || 5000;
+const port = process.env.PORT || 5000;
 const express = require('express')
 const app = express()
 
