@@ -4,7 +4,7 @@ const connection = require('../data/db')
 const sheetsController = {
     createSheet: (req, res) => {
         const {title, theme} = req.body
-        const userId = res.user.userId;
+        const userId = req.user.userId;
 
         if(!title){
             return res.status(404).json({error: "Il campo titolo è obbligatorio"})

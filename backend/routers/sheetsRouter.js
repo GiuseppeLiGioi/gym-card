@@ -1,7 +1,8 @@
 const express = require('express')
+const authMiddleware = require ('../middlewares/authMiddleware')
 const sheetsController = require ('../controllers/sheetsController')
 const router = express.Router()
 
-router.post('/', sheetsController.createSheet)
+router.post('/', authMiddleware, sheetsController.createSheet)
 
 module.exports = router;
