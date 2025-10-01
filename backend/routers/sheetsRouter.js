@@ -12,6 +12,6 @@ router.delete('/:id', authMiddleware, sheetsController.deleteSheet)
 router.post('/:id/exercises', authMiddleware, exercisesController.createExercise)
 router.get('/:id/exercises', authMiddleware, exercisesController.showExercise)
 router.put('/:sheetId/exercises/:exerciseId', authMiddleware, exercisesController.editExercise)
-//router.delete('/:id', authMiddleware, exercisesController.de)
+router.delete('/sheetId/:id/:exerciseId', authMiddleware, exercisesController.deleteExercise)
 
 module.exports = router;
