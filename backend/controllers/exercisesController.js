@@ -44,6 +44,38 @@ const exercisesController = {
                 res.status(200).json({exercises: results })
             })
         })
+    },
+
+    
+    editExercise: (req, res) => {
+    const userId = req.user.userId
+    const exerciseId = req.params.id
+    const {  name, sets, reps, weight, image } = req.body
+
+    if (!name || !sets || !reps) {
+            return res.status(404).json({ message: "I campi idScheda, nome, serie e ripetizioni sono obbligatori" })
+        }
+
+     const showExercisesQuery = 'SELECT * FROM exercises WHERE id = ?'
+        connection.query(showExercisesQuery, [exerciseId], (err, results) => {
+            if (err) return res.status(500).json({ error: err.message })
+            if (results.length === 0) return res.status(404).json({ message: "Nessun esercizio trovato" })
+                 
+                const sheetId = results[0].sheet_id;
+
+            const verifySheetUserQuery = 'SELECT * FROM workout_sheets WHERE id = ? AND user_id = ?'
+            connection.query(verifySheetUserQuery, [sheetId, userId], (err, results) => {
+                if (err) return res.status(500).json({ error: err.message })
+
+            const updateQuery = 'UPDATE exercises SET name = ?, sets = ?, reps = ?, weight = ?, image = ? WHERE id = ?'
+            connection.query(updateQuery, [name, sets, reps, weight, image, exerciseId], (err, results) => {
+                if(err) return res.status(500).json({error: err.message})
+                    if(results.affectedRows === 0) return res.status(404).json({message: "Non è stato possibile modificare l'esercizio"})
+
+                    res.status(200).json({message: "esercizio aggiornato con successo"})
+            })
+            })
+        })
     }
 }
 

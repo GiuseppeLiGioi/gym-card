@@ -4,7 +4,4 @@ const exercisesController = require('../controllers/exercisesController')
 
 const router = express.Router()
 
-router.post('/', authMiddleware, exercisesController.createExercise)
-router.get('/', authMiddleware, exercisesController.showExercise)
-
 module.exports = router
