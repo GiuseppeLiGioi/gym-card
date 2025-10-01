@@ -34,6 +34,41 @@ const sheetsController = {
 
             res.status(200).json({sheets: results})
     })
+    },
+
+    editSheet: (req, res) => {
+    const userId = req.user.userId;
+    const {title, theme} = req.body;
+    
+    const idSheet = req.params.id
+
+    const updateQuery = 'UPDATE workout_sheets SET title = ?, theme = ? WHERE id = ? AND user_id = ?'
+    connection.query(updateQuery, [title, theme, idSheet, userId], (err, results) => {
+        if(err) return res.status(500).json({error: err.message})
+            if (results.affectedRows === 0) { 
+                return res.status(404).json({message: "Non è stato possibile modificare la scheda"})
+             }
+           
+
+        res.status(200).json({message: "scheda aggiornata con successo"})
+    })
+    },
+
+    
+    deleteSheet: (req, res) => {
+    const userId = req.user.userId;
+    const idSheet = req.params.id
+
+    const deleteQuery = 'DELETE FROM workout_sheets WHERE id = ? AND user_id = ?'
+    connection.query(deleteQuery, [idSheet, userId], (err, results) => {
+        if(err) return res.status(500).json({error: err.message})
+            if (results.affectedRows === 0) { 
+                return res.status(404).json({message: "Non è stato possibile eliminare la scheda"})
+             }
+           
+
+        res.status(200).json({message: "scheda eliminata con successo"})
+    })
     }
 
 
