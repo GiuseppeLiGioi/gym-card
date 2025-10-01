@@ -22,6 +22,20 @@ const sheetsController = {
         })
     },
 
+    showSheets: (req, res) => {
+    const userId = req.user.userId;  
+
+    const showQuery = 'SELECT * FROM workout_sheets WHERE user_id = ?'
+    connection.query(showQuery, [userId], (err, results) => {
+        if(err) return res.status(500).json({error: err.message})
+            if(results.length === 0){
+                return res.status(404).json({message: "Nessuna scheda trovata"})
+            }
+
+            res.status(200).json({sheets: results})
+    })
+    }
+
 
 }
 
