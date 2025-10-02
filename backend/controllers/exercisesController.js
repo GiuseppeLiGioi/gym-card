@@ -96,25 +96,50 @@ const exercisesController = {
         });
     },
 
-    searchExercise: (req,res) => {
-        
+    searchExercise: (req, res) => {
+
         const sheetId = req.params.sheetId
         const userInput = req.query.name
         const userId = req.user.userId
 
         const verifySheetUserQuery = 'SELECT * FROM workout_sheets WHERE id = ? AND user_id = ?'
         connection.query(verifySheetUserQuery, [sheetId, userId], (err, results) => {
-            if(err) return res.status(500).json({error: err.message})
-                if(results.length === 0) return res.status(404).json({message: "Scheda non trovata o non appartenente all'utente"})
+            if (err) return res.status(500).json({ error: err.message })
+            if (results.length === 0) return res.status(404).json({ message: "Scheda non trovata o non appartenente all'utente" })
 
-        const searchExerciseQuery = 'SELECT * FROM exercises WHERE sheet_id = ? AND name LIKE ?'
-        const searchValue = `%${userInput}%`
-        connection.query(searchExerciseQuery, [sheetId, searchValue], (err, results) => {
-            if(err) return res.status(500).json({error: err.message})
-                 if(results.length === 0) return res.status(404).json({message: "Nessun esercizio trovato con questo nome"})
+            const searchExerciseQuery = 'SELECT * FROM exercises WHERE sheet_id = ? AND name LIKE ?'
+            const searchValue = `%${userInput}%`
+            connection.query(searchExerciseQuery, [sheetId, searchValue], (err, results) => {
+                if (err) return res.status(500).json({ error: err.message })
+                if (results.length === 0) return res.status(404).json({ message: "Nessun esercizio trovato con questo nome" })
 
-                    res.status(200).json({exercises: results})
-        })         
+                res.status(200).json({ exercises: results })
+            })
+        })
+
+    },
+
+    markExerciseCompleted: (req, res) => {
+        const exerciseId = req.params.exerciseId
+        const userId = req.user.userId
+
+        const verifySheetUserQuery = 'SELECT e.*, w.user_id FROM exercises e JOIN workout_sheets w ON e.sheet_id = w.id WHERE e.id = ? AND user_id = ?'
+        connection.query(verifySheetUserQuery, [exerciseId, userId], (err, results) => {
+            if (err) return res.status(500).json({ error: err.message })
+            if (results.length === 0) return res.status(404).json({ message: "Esercizio non trovato o non appartenente all'utente" })
+
+            const completed = true;
+
+            const updateCompletedExercise = 'UPDATE exercises SET completed = ? WHERE id = ?'
+            connection.query(updateCompletedExercise, [completed, exerciseId], (err, results) => {
+                if (err) return res.status(500).json({ error: err.message })
+                if (results.affectedRows === 0) return res.status(404).json({ message: "Non è stato possibile marcare l'esercizio come completato" })
+
+                res.status(200).json({
+                    message: "Esercizio Completato",
+                    completed: completed
+                })
+            })
         })
 
     }
