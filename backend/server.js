@@ -1,7 +1,6 @@
 require('dotenv').config();
 const cors = require('cors');
 const authRouter = require('./routers/authRouter')
-const exercisesRouter= require('./routers/exercisesRouter')
 const progressRouter = require('./routers/progressRouter')
 const sheetsRouter = require('./routers/sheetsRouter')
 
@@ -19,7 +18,6 @@ app.use(express.json())
 
 app.use('/auth', authRouter)
 app.use('/sheets', sheetsRouter)
-app.use('/exercises', exercisesRouter)
 app.use('/progress', progressRouter)
 
 app.get('/', (req, res) => {

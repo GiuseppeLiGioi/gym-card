@@ -14,4 +14,5 @@ router.get('/:id/exercises', authMiddleware, exercisesController.showExercise)
 router.put('/:sheetId/exercises/:exerciseId', authMiddleware, exercisesController.editExercise)
 router.delete('/sheetId/exercises/:exerciseId', authMiddleware, exercisesController.deleteExercise)
 
+
 module.exports = router;
