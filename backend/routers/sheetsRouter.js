@@ -14,5 +14,11 @@ router.get('/:id/exercises', authMiddleware, exercisesController.showExercise)
 router.put('/:sheetId/exercises/:exerciseId', authMiddleware, exercisesController.editExercise)
 router.delete('/sheetId/exercises/:exerciseId', authMiddleware, exercisesController.deleteExercise)
 
+router.get('/:sheetId/exercises/search', authMiddleware, exercisesController.searchExercise)
+router.get('/:sheetId/progress', authMiddleware, sheetsController.showProgress)
+router.post('/:sheetId/duplicate', authMiddleware, sheetsController.duplicateSheet)
+router.put('/:sheetId/exercises/:exerciseId/complete', authMiddleware, exercisesController.markExerciseCompleted)
+
+
 
 module.exports = router;
