@@ -1,4 +1,6 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom"
+import { GlobalProvider } from "./assets/contexts/GlobalContext"
+import ProtectedRoute from "./assets/Components/ProtectedRoute"
 import AuthenticationPage from "./assets/Pages/AuthenticationPage"
 import HomePage from "./assets/Pages/HomePage"
 import ProgressPage from "./assets/Pages/ProgressPage"
@@ -8,14 +10,39 @@ function App() {
 
   return (
     <>
+    <GlobalProvider>   
     <BrowserRouter>
     <Routes>
-      <Route path="/login" element={<AuthenticationPage />}/>
-      <Route path="/home" element={<HomePage />}/>
-      <Route path="/sheet/:sheetId" element={<SingleSheetPage />}/>
-      <Route path="/sheet/:sheetId/progress" element={<ProgressPage />}/>
+
+      
+      <Route path="/login" element={
+        <ProtectedRoute>
+          <AuthenticationPage />
+        </ProtectedRoute>     
+        }/>
+
+      <Route path="/home" element={
+        <ProtectedRoute>
+          <HomePage />
+        </ProtectedRoute>  
+        }/>
+
+      <Route path="/sheet/:sheetId" element={
+        <ProtectedRoute>
+          <SingleSheetPage />
+        </ProtectedRoute>
+       }/>
+
+      <Route path="/sheet/:sheetId/progress" element={
+        <ProtectedRoute>
+          <ProgressPage />
+        </ProtectedRoute>
+        }/>
+
+
     </Routes>
     </BrowserRouter>
+    </GlobalProvider>    
    
     </>
   )
