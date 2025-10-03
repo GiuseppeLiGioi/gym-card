@@ -165,13 +165,7 @@ const sheetsController = {
             progress: total > 0 ? `${Math.round((totalCompleted / total) * 100)}%` : "0%"
             })
             })
-
-
-
-         })
-
-
-            
+         })           
         })
     }
 
