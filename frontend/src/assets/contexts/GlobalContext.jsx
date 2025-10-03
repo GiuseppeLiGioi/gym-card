@@ -57,6 +57,16 @@ export const GlobalProvider = ({ children }) => {
         navigate('/login')
        
     }
+    //funzione che aggiunge il token ad ogni chiamata fetch per verificare l'identità dell'utente.
+    async function fetchWithAuth (url, options = {}){
+        const headers = {
+            ...(options.headers || {}),
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+
+        return fetch(url, {...options, headers})
+    }
 
 
 
