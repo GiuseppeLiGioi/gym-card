@@ -65,6 +65,26 @@ const authController = {
         }
         )
 
+    },
+
+    verifyUser: (req,res) => {
+
+    const userId = req.user.userId
+
+
+    const verifyUserQuery = 'SELECT * FROM users WHERE id = ?'
+    connection.query(verifyUserQuery, [userId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message })
+            if (results.length === 0) return res.status(401).json({ message: "Non è stato possibile ricevere le informazioni dell'utente, non Autorizzato" })
+
+                
+            res.status(200).json({
+            userName: results[0].name,
+            userEmail: results[0].email,
+            userId: userId
+            })
+    })
+
     }
 };
 
