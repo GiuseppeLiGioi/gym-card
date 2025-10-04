@@ -12,7 +12,7 @@ if(loading){
 }else if(!isAuthenicated){
 navigate('/login')
 }else if(isAuthenicated){
-return Children;
+return children;
 }
    
 

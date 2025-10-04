@@ -65,7 +65,14 @@ export const GlobalProvider = ({ children }) => {
             Authorization: `Bearer ${token}`
         }
 
-        return fetch(url, {...options, headers})
+        const res = fetch(url, {...options, headers})
+        
+        if(res.status === 401){
+        logout()
+        toast.error("Sessione scaduta, effettua nuovamente il login")
+        navigate('/login')
+        }
+        return res;
     }
 
 
