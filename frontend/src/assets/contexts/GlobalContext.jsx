@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
-import { verifyUser } from "../../../../backend/controllers/authController";
+
 
 const GlobalContext = createContext();
 
@@ -11,6 +12,14 @@ export const GlobalProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
 
+    if (loading) {
+        return (
+            <div className="spinner-container">
+                <div className="spinner"></div>
+            </div>
+        )
+    }
+
     //funzione che aggiunge il token ad ogni chiamata fetch per verificare l'identità dell'utente.
     async function fetchWithAuth(url, options = {}) {
         const headers = {
@@ -19,7 +28,7 @@ export const GlobalProvider = ({ children }) => {
             Authorization: `Bearer ${token}`
         }
 
-        const res = fetch(url, { ...options, headers })
+        const res = await fetch(url, { ...options, headers })
 
         if (res.status === 401) {
             logout()
@@ -29,7 +38,7 @@ export const GlobalProvider = ({ children }) => {
         return res;
     }
 
-    function updateUser (newUserData){
+    function updateUser(newUserData) {
         setUser(newUserData)
         localStorage.setItem("gym_user", json.stringify(newUserData))
     }
@@ -37,28 +46,28 @@ export const GlobalProvider = ({ children }) => {
 
 
 
-    async function verifyTokenUser (){
+    async function verifyTokenUser() {
         const savedToken = localStorage.getItem("gym_token")
-        if(!savedToken){
+        if (!savedToken) {
             setIsAuthenticated(false)
             setLoading(false)
             return;
         }
 
-        try{
+        try {
             const res = await fetchWithAuth('/auth/me')
-            if(!res.ok){
-              throw new Error('Errore durante la verifica del token utente')
+            if (!res.ok) {
+                throw new Error('Errore durante la verifica del token utente')
             }
-            const data = await verifyUser.json()
-            
+            const data = await res.json()
+
             setToken(savedToken)
             updateUser(data)
             setIsAuthenticated(true)
-        }catch(error){
+        } catch (error) {
             console.error(error)
             logout()
-        }finally{
+        } finally {
             setLoading(false)
         }
 
@@ -66,13 +75,13 @@ export const GlobalProvider = ({ children }) => {
 
 
     useEffect(() => {
-       verifyTokenUser()
+        verifyTokenUser()
     }, [])
 
     async function login(email, password) {
         try {
             const res = await fetch('http://localhost:5000/auth/login', {
-                method: POST,
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
             })
@@ -88,6 +97,7 @@ export const GlobalProvider = ({ children }) => {
             localStorage.setItem("gym_user", JSON.stringify(data.user))
         } catch (error) {
             console.error("Errore login:", error.message);
+            toast.error("Non è stato possibile effettuare il login")
             return false;
         }
     }
@@ -116,7 +126,12 @@ export const GlobalProvider = ({ children }) => {
                 isAuthenticated,
                 setIsAuthenticated,
                 loading,
-                setLoading
+                setLoading,
+                logout,
+                login,
+                fetchWithAuth,
+                updateUser
+
             }}
         >
             {children}
