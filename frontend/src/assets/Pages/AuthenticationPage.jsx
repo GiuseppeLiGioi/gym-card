@@ -41,9 +41,7 @@ export default function AuthenticationPage() {
                 toast.error("Credenziali errate")
             }
         } catch (error) {
-            if(error.includes(404)) toast.error("E-mail errata")
-            else if(error.includes(401)) toast.error("Password errata")
-            toast.error("Errore di connessione")
+          console.error(error)
         } finally {
             setLoading(false)
         }
@@ -78,7 +76,7 @@ export default function AuthenticationPage() {
                 toast.error("Impossibile effettuare la registrazione")
             }
         } catch (error) {
-            toast.error("Errore di connessione")
+            console.error(error)
         } finally {
             setLoading(false)
         }

@@ -26,12 +26,12 @@ const authController = {
             return res.status(400).json({ error: "Password non valida" });
         }
         //verifico le email
-        const verifyEmailQuery = 'SELECT * FROM users WHERE id = ?'
+        const verifyEmailQuery = 'SELECT * FROM users WHERE email = ?'
         connection.query(verifyEmailQuery, [email], (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
 
             if (results.length > 0) {
-                return res.status(404).json({ message: "Email già registrata" })
+                return res.status(409).json({ message: "Email già registrata" })
             }
             //hash password: rendo crtptata la password
             const hashedPassword = bcrypt.hashSync(password)

@@ -87,7 +87,13 @@ export const GlobalProvider = ({ children }) => {
             })
 
             const data = await res.json()
-            if (!res.ok) throw new Error(data.message || "Errore Login")
+
+            if (!res.ok) {
+            if(res.status === 404) toast.error("E-mail errata");
+            else if(res.status === 401) toast.error("Password errata");
+            else toast.error(data.message || "Errore login");
+            return false;
+        }
 
             setIsAuthenticated(true)
             setToken(data.token)
@@ -97,8 +103,7 @@ export const GlobalProvider = ({ children }) => {
             localStorage.setItem("gym_user", JSON.stringify(data.user))
             return true;
         } catch (error) {
-            console.error("Errore login:", error.message);
-            toast.error("Non è stato possibile effettuare il login")
+          console.error("Errore login:", error.message);
             return false;
         }
     }
@@ -113,14 +118,18 @@ export const GlobalProvider = ({ children }) => {
             })
 
             const data = await res.json()
-            if (!res.ok) throw new Error(data.message || "Errore Registrazione")
+            
+            if (!res.ok) {
+            if(res.status === 409) toast.error("E-mail già registrata");
+            else toast.error(data.message || "Errore registrazione");
+            return false;
+        }
             await login(email, password)
             navigate('/home')
             return true;
         } catch (error) {
-            console.error("Errore login:", error.message);
-            toast.error("Non è stato possibile effettuare la registrazione")
-            return false;
+        console.error("Errore login:", error.message);
+        return false;
         }
     }
 
