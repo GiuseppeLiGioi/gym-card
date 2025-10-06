@@ -29,6 +29,11 @@ export const GlobalProvider = ({ children }) => {
         return res;
     }
 
+    function updateUser (newUserData){
+        setUser(newUserData)
+        localStorage.setItem("gym_user", json.stringify(newUserData))
+    }
+
 
 
 
@@ -48,7 +53,7 @@ export const GlobalProvider = ({ children }) => {
             const data = await verifyUser.json()
             
             setToken(savedToken)
-            setUser(data)
+            updateUser(data)
             setIsAuthenticated(true)
         }catch(error){
             console.error(error)
