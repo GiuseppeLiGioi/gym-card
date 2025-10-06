@@ -10,8 +10,8 @@ function App() {
 
   return (
     <>
-    <GlobalProvider>   
     <BrowserRouter>
+    <GlobalProvider>   
     <Routes>
 
       
@@ -41,8 +41,8 @@ function App() {
 
 
     </Routes>
-    </BrowserRouter>
     </GlobalProvider>    
+    </BrowserRouter>
    
     </>
   )

@@ -12,13 +12,6 @@ export const GlobalProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
 
-    if (loading) {
-        return (
-            <div className="spinner-container">
-                <div className="spinner"></div>
-            </div>
-        )
-    }
 
     //funzione che aggiunge il token ad ogni chiamata fetch per verificare l'identità dell'utente.
     async function fetchWithAuth(url, options = {}) {
@@ -27,15 +20,24 @@ export const GlobalProvider = ({ children }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         }
-
+        try{     
         const res = await fetch(url, { ...options, headers })
-
+            
+        if(!res.ok){
+            toast.error("Errore di connessione al server")
+        }
+            
         if (res.status === 401) {
             logout()
             toast.error("Sessione scaduta, effettua nuovamente il login")
             navigate('/login')
         }
         return res;
+
+        }catch(error){
+          console.error(error)
+           toast.error("Connessione fallita")
+        }
     }
 
     function updateUser(newUserData) {
@@ -57,7 +59,7 @@ export const GlobalProvider = ({ children }) => {
         try {
             const res = await fetchWithAuth('/auth/me')
             if (!res.ok) {
-                throw new Error('Errore durante la verifica del token utente')
+               toast.error('Errore durante la verifica del token utente')
             }
             const data = await res.json()
 
@@ -66,6 +68,7 @@ export const GlobalProvider = ({ children }) => {
             setIsAuthenticated(true)
         } catch (error) {
             console.error(error)
+            toast.error("Non è stato possibile verificare il token utente")
             logout()
         } finally {
             setLoading(false)
@@ -95,6 +98,28 @@ export const GlobalProvider = ({ children }) => {
 
             localStorage.setItem("gym_token", data.token)
             localStorage.setItem("gym_user", JSON.stringify(data.user))
+            return true;
+        } catch (error) {
+            console.error("Errore login:", error.message);
+            toast.error("Non è stato possibile effettuare il login")
+            return false;
+        }
+    }
+
+    
+    async function register(name, email, password) {
+        try {
+            const res = await fetch('http://localhost:5000/auth/register', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({name, email, password })
+            })
+
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.message || "Errore Registrazione")
+            await login(email, password)
+            navigate('/home')
+            return true;
         } catch (error) {
             console.error("Errore login:", error.message);
             toast.error("Non è stato possibile effettuare il login")
@@ -130,7 +155,8 @@ export const GlobalProvider = ({ children }) => {
                 logout,
                 login,
                 fetchWithAuth,
-                updateUser
+                updateUser,
+                register
 
             }}
         >
