@@ -40,7 +40,7 @@ const authController = {
         const loginQuery = 'SELECT * FROM users WHERE email = ?'
         connection.query(loginQuery, [email], (err, results) => {
             if (err) return res.status(500).json({ error: err.message })
-            if (results.length === 0) return res.status(404).json({ message: "Utente non trovato" })
+            if (results.length === 0) return res.status(404).json({ message: "Email non trovata" })
 
             const user = results[0]
 

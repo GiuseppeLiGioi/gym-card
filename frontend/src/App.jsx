@@ -1,5 +1,6 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import { GlobalProvider } from "./assets/contexts/GlobalContext"
+import { ToastContainer } from "react-toastify"
 import ProtectedRoute from "./assets/Components/ProtectedRoute"
 import AuthenticationPage from "./assets/Pages/AuthenticationPage"
 import HomePage from "./assets/Pages/HomePage"
@@ -11,7 +12,8 @@ function App() {
   return (
     <>
     <BrowserRouter>
-    <GlobalProvider>   
+    <GlobalProvider> 
+      <ToastContainer />
     <Routes>
 
       

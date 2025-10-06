@@ -29,14 +29,12 @@ export const GlobalProvider = ({ children }) => {
             
         if (res.status === 401) {
             logout()
-            toast.error("Sessione scaduta, effettua nuovamente il login")
             navigate('/login')
         }
         return res;
 
         }catch(error){
           console.error(error)
-           toast.error("Connessione fallita")
         }
     }
 
@@ -59,7 +57,7 @@ export const GlobalProvider = ({ children }) => {
         try {
             const res = await fetchWithAuth('/auth/me')
             if (!res.ok) {
-               toast.error('Errore durante la verifica del token utente')
+               throw new Error('Errore durante la verifica del token utente')
             }
             const data = await res.json()
 
@@ -68,7 +66,6 @@ export const GlobalProvider = ({ children }) => {
             setIsAuthenticated(true)
         } catch (error) {
             console.error(error)
-            toast.error("Non è stato possibile verificare il token utente")
             logout()
         } finally {
             setLoading(false)
@@ -122,7 +119,7 @@ export const GlobalProvider = ({ children }) => {
             return true;
         } catch (error) {
             console.error("Errore login:", error.message);
-            toast.error("Non è stato possibile effettuare il login")
+            toast.error("Non è stato possibile effettuare la registrazione")
             return false;
         }
     }
