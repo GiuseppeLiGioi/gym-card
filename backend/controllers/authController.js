@@ -2,12 +2,28 @@ const connection = require('../data/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]{2,50}$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 const authController = {
     register: (req, res) => {
         const { name, email, password } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({ error: "tutti i campi sono obbligatori" })
+        }
+
+        if (!nameRegex.test(name)) {
+            return res.status(400).json({ error: "Nome non valido" });
+        }
+
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: "Email non valida" });
+        }
+
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({ error: "Password non valida" });
         }
         //verifico le email
         const verifyEmailQuery = 'SELECT * FROM users WHERE id = ?'
@@ -67,23 +83,23 @@ const authController = {
 
     },
 
-    verifyUser: (req,res) => {
+    verifyUser: (req, res) => {
 
-    const userId = req.user.userId
+        const userId = req.user.userId
 
 
-    const verifyUserQuery = 'SELECT * FROM users WHERE id = ?'
-    connection.query(verifyUserQuery, [userId], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message })
+        const verifyUserQuery = 'SELECT * FROM users WHERE id = ?'
+        connection.query(verifyUserQuery, [userId], (err, results) => {
+            if (err) return res.status(500).json({ error: err.message })
             if (results.length === 0) return res.status(401).json({ message: "Non è stato possibile ricevere le informazioni dell'utente, non Autorizzato" })
 
-                
+
             res.status(200).json({
-            userName: results[0].name,
-            userEmail: results[0].email,
-            userId: userId
+                userName: results[0].name,
+                userEmail: results[0].email,
+                userId: userId
             })
-    })
+        })
 
     }
 };
