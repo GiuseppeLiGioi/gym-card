@@ -13,13 +13,13 @@ const frontendUrl = process.env.FRONTEND_APP.replace(/\/$/, ''); // rimuove even
 app.use(cors({
   origin: frontendUrl
 }));
-app.use(express.static('public'));
 app.use(express.json())
 
 app.use('/auth', authRouter)
 app.use('/sheets', sheetsRouter)
 app.use('/progress', progressRouter)
 
+app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.send("server attivo e pronto")
 })

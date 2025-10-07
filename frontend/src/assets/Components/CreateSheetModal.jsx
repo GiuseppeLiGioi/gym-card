@@ -7,6 +7,7 @@ export default function CreateSheetModal({showModal, onClose, onSave}){
 
 
     return(
+        showModal &&(
         <div className="container-modal">
             <div className="container-modal-inner">
                 <h2 className="modal-title">CREA LA TUA SCHEDA</h2>
@@ -37,6 +38,12 @@ export default function CreateSheetModal({showModal, onClose, onSave}){
               
             </div>
 
+            <div className="container-modal-bottom">
+                <button className="btn-modal" onClick={onSave}>Salva Scheda</button>
+                <button className="btn-modal" onClick={onClose}>Chiudi</button>
+            </div>  
+
         </div>
+        )
     )
 }

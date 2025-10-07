@@ -8,11 +8,35 @@ import CreateSheetModal from '../Components/CreateSheetModal';
 
 
 export default function HomePage() {
+    const [showModal, setShowModal] = useState(false)
+    const [sheets, setSheets] = useState([])
+    const [currentSheet, setCurrentSheet] = useState({})
+    const {setLoading, fetchWithAuth, token} = useGlobalContext()
 
-const [showModal, setShowModal] = useState(false)
-const [sheets, setSheets] = useState([])
-const [currentSheet, setCurrentSheet] = useState({})
-const {setLoading, fetchWithAuth, token} = useGlobalContext()
+function onClose(){
+setShowModal(false)
+}
+
+async function onSave(){
+setLoading(true)
+
+try{
+const res = await fetchWithAuth('/sheets', { method: 'POST', body: JSON.stringify({ title: titleSheet, theme: themeSheet })})
+console.log("RESPONSE:", res);
+if(!res.ok) throw new Error("Errore nell'inserire i campi scelti");
+
+const data = await res.json()
+
+setSheets(data.sheets || data || [])
+
+
+}catch(error){
+console.error(error)
+}finally {
+setLoading(false);
+}
+}
+
 
 async function fetchSheets(){
 setLoading(true)
