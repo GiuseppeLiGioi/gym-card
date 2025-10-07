@@ -3,6 +3,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useGlobalContext } from '../contexts/GlobalContext';
+import CreateSheetModal from '../Components/CreateSheetModal';
 
 
 
@@ -40,11 +41,18 @@ fetchSheets()
 }, [token])
 
     return(
+        <>
+        
         <div className="container-homepage">
            <h1 className="title-home">LE TUE SCHEDE</h1>
            <button className='btn-plus' onClick={() => {setShowModal(true), setCurrentSheet(null)}}>
             {<FontAwesomeIcon icon={faPlus} />}
            </button>
         </div>
+
+        <CreateSheetModal showModal={showModal} onClose={onClose} onSave={onSave}/>
+        </>
+
+
     )
  }

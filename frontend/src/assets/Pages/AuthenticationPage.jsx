@@ -101,7 +101,7 @@ export default function AuthenticationPage() {
                         />
 
                         <input
-                            type="password"
+                            type="text"
                             placeholder="Inserisci la tua password"
                             className="input-login"
                             value={password}
@@ -135,7 +135,7 @@ export default function AuthenticationPage() {
                         />
 
                         <input
-                            type="password"
+                            type="text"
                             placeholder="Inserisci la tua password"
                             className="input-register"
                             value={password}

@@ -8,11 +8,11 @@ const connection = require('./data/db')
 const port = process.env.PORT || 5000;
 const express = require('express')
 const app = express()
+const frontendUrl = process.env.FRONTEND_APP.replace(/\/$/, ''); // rimuove eventuale slash
 
-//middleware generali
 app.use(cors({
-    origin: process.env.FRONTEND_APP
-}))
+  origin: frontendUrl
+}));
 app.use(express.static('public'));
 app.use(express.json())
 
