@@ -50,7 +50,7 @@ ul, ol {
   box-sizing: border-box;
 }
 
-/* Titolo autenticazione */
+
 .title-authentication {
   font-size: 2rem;
   font-weight: 700;
@@ -59,7 +59,7 @@ ul, ol {
   margin-bottom: 24px;
 }
 
-/* Form login e registrazione */
+
 .container-login-form,
 .container-register-form {
   display: flex;
@@ -71,10 +71,10 @@ ul, ol {
   box-shadow: 0 6px 12px rgba(0,0,0,0.5);
   width: 90%;
   max-width: 400px;
-  margin: 0 auto; /* centro il form */
+  margin: 0 auto; 
 }
 
-/* Input fields */
+
 .input-login,
 .input-register {
   padding: 12px;
@@ -93,7 +93,7 @@ ul, ol {
   box-shadow: 0 0 5px rgba(245,166,35,0.7);
 }
 
-/* Pulsanti login/registrazione */
+
 .btn-login,
 .btn-register {
   padding: 12px;
@@ -118,7 +118,6 @@ ul, ol {
   transform: scale(1.02);
 }
 
-/* Switch login/registrazione */
 .switch-form {
   margin-top: 12px;
   padding: 8px 12px;
@@ -170,7 +169,7 @@ ul, ol {
   margin: 0;
 }
 
-/* Pulsanti icone */
+
 .btn-user,
 .btn-hamburger {
   background: #2c2c2c;
@@ -223,7 +222,6 @@ ul, ol {
   gap: 1rem;
 }
 
-/* Disabilita link su /login */
 .disabled-link {
   pointer-events: none;
   opacity: 0.5;
