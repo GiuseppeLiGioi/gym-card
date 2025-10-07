@@ -23,7 +23,7 @@ if(loading){
 )
 }
 
-if (isAuthenticated) {
+if (!isAuthenticated) {
   return null;
 }
 

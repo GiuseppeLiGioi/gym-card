@@ -1,4 +1,4 @@
-/* ===== Reset globale ===== */
+/*  Reset globale  */
 * {
   margin: 0;
   padding: 0;
@@ -6,17 +6,23 @@
 }
 
 html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Arial', sans-serif;
   background-color: #1a1a1a;
   width: 100%;
+  height: 100%;        /* assicurati che html e body occupino tutta l’altezza */
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 ul, ol {
   list-style: none;
 }
 
-/* ===== Spinner (opzionale) ===== */
+
 .spinner-container {
   display: flex;
   justify-content: center;
@@ -39,7 +45,7 @@ ul, ol {
   100% { transform: rotate(360deg); }
 }
 
-/* ===== Container autenticazione ===== */
+/*  Container autenticazione  */
 .container-authentication {
   display: flex;
   flex-direction: column;
@@ -133,7 +139,7 @@ ul, ol {
   color: #fff;
 }
 
-/* ===== Header ===== */
+/*  Header  */
 .container-header {
   position: sticky;
   top: 0;
@@ -228,7 +234,7 @@ ul, ol {
   cursor: default;
 }
 
-/* ===== Media query TABLET ===== */
+/* Media query TABLET */
 @media (min-width: 768px) {
   .container-login-form,
   .container-register-form {
@@ -263,7 +269,7 @@ ul, ol {
   }
 }
 
-/* ===== Media query DESKTOP ===== */
+/* Media query DESKTOP */
 @media (min-width: 1024px) {
   .container-login-form,
   .container-register-form {
