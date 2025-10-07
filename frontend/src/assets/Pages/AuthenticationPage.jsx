@@ -84,6 +84,8 @@ export default function AuthenticationPage() {
     }
     return (
         <>
+        <div className="container-authentication">
+
         <h1 className="title-authentication">ACCEDI O REGISTRATI</h1>
             {
 
@@ -148,7 +150,8 @@ export default function AuthenticationPage() {
 
 
 
-            <button onClick={() => setIsRegistering(!isRegistering)}>{isRegistering ? "Vai al login" : "Vai alla registrazione"}</button>
+            <button className="switch-form" onClick={() => setIsRegistering(!isRegistering)}>{isRegistering ? "Vai al login" : "Vai alla registrazione"}</button>
+        </div>
         </>
 
 

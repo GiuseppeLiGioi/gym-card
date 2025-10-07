@@ -6,6 +6,7 @@ import AuthenticationPage from "./assets/Pages/AuthenticationPage"
 import HomePage from "./assets/Pages/HomePage"
 import ProgressPage from "./assets/Pages/ProgressPage"
 import SingleSheetPage from "./assets/Pages/SingleSheetPage"
+import Header from "./assets/Components/Header"
 function App() {
   
 
@@ -36,6 +37,7 @@ function App() {
         }}
         toastStyle={{ backgroundColor: "#1e1e2f", color: "white" }}
       />
+      <Header />
     <Routes>
 
       
