@@ -13,7 +13,29 @@ function App() {
     <>
     <BrowserRouter>
     <GlobalProvider> 
-      <ToastContainer />
+         <ToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{
+          backgroundColor: "#1e1e2f",
+          color: "white",
+          fontWeight: "600",
+          padding: "16px 24px",
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+          textAlign: "center",
+          minWidth: "250px",
+          maxWidth: "90%",
+        }}
+        toastStyle={{ backgroundColor: "#1e1e2f", color: "white" }}
+      />
     <Routes>
 
       
