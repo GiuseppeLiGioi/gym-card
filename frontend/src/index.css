@@ -3,16 +3,21 @@
   padding: 0;
   box-sizing: border-box;
 }
-html, body {
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #222;
+
+html,
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -20,13 +25,13 @@ ul, ol {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
-  background-color: #f5f5f5; 
+  height: 100vh;
+  background-color: #f5f5f5;
 }
 
 .spinner {
-  border: 8px solid #f3f3f3; 
-  border-top: 8px solid #3498db; 
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -34,7 +39,120 @@ ul, ol {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
+.title-authentication {
+  font-size: 24px;
+  font-weight: 700;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.container-login-form,
+.container-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+}
+
+.input-login,
+.input-register {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.btn-login,
+.btn-register {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-login:disabled,
+.btn-register:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-login:hover:not(:disabled),
+.btn-register:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+button {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* media query per TABLET (min-width: 600px)*/
+@media (min-width: 600px) {
+
+  .container-login-form,
+  .container-register-form {
+    gap: 20px;
+    padding: 32px;
+  }
+
+  .title-authentication {
+    font-size: 28px;
+    margin-bottom: 28px;
+  }
+}
+
+/* media query per DESKTOP (min-width: 1024px)*/
+@media (min-width: 1024px) {
+  body {
+    justify-content: flex-start;
+    padding: 40px;
+  }
+
+  .container-login-form,
+  .container-register-form {
+    width: 400px;
+    padding: 40px;
+    gap: 24px;
+  }
+
+  .btn-login,
+  .btn-register {
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  .input-login,
+  .input-register {
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  .title-authentication {
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+
+}

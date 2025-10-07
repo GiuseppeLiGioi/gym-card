@@ -84,6 +84,7 @@ export default function AuthenticationPage() {
     }
     return (
         <>
+        <h1 className="title-authentication">ACCEDI O REGISTRATI</h1>
             {
 
                 !isRegistering && (
@@ -92,6 +93,7 @@ export default function AuthenticationPage() {
                         <input
                             type="text"
                             placeholder="Inserisci la tua e-mail"
+                            className="input-login"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -99,6 +101,7 @@ export default function AuthenticationPage() {
                         <input
                             type="text"
                             placeholder="Inserisci la tua password"
+                            className="input-login"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -116,6 +119,7 @@ export default function AuthenticationPage() {
                         <input
                             type="text"
                             placeholder="Inserisci il tuo nome"
+                            className="input-register"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
@@ -123,6 +127,7 @@ export default function AuthenticationPage() {
                         <input
                             type="text"
                             placeholder="Inserisci la tua e-mail"
+                            className="input-register"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -130,6 +135,7 @@ export default function AuthenticationPage() {
                         <input
                             type="text"
                             placeholder="Inserisci la tua password"
+                            className="input-register"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
