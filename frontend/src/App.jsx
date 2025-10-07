@@ -9,7 +9,6 @@ import SingleSheetPage from "./assets/Pages/SingleSheetPage"
 import Header from "./assets/Components/Header"
 import PlansPage from "./assets/Pages/PlansPage"
 import CoursesPage from "./assets/Pages/CoursesPage"
-import UserPage from "./assets/Pages/UserPage"
 function App() {
   
 
@@ -68,11 +67,6 @@ function App() {
         </ProtectedRoute>  
         }/>
 
-          <Route path="/user" element={
-        <ProtectedRoute>
-          <UserPage />
-        </ProtectedRoute>  
-        }/>
 
       <Route path="/sheet/:sheetId" element={
         <ProtectedRoute>
