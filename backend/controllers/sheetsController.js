@@ -25,15 +25,13 @@ const sheetsController = {
     showSheets: (req, res) => {
         const userId = req.user.userId;
 
-        const showQuery = 'SELECT * FROM workout_sheets WHERE user_id = ?'
+        const showQuery = 'SELECT * FROM workout_sheets WHERE user_id = ?';
         connection.query(showQuery, [userId], (err, results) => {
-            if (err) return res.status(500).json({ error: err.message })
-            if (results.length === 0) {
-                return res.status(404).json({ message: "Nessuna scheda trovata" })
-            }
+            if (err) return res.status(500).json({ error: err.message });
 
-            res.status(200).json({ sheets: results })
-        })
+           
+            res.status(200).json({ sheets: results || [] });
+        });
     },
 
     editSheet: (req, res) => {
@@ -114,7 +112,7 @@ const sheetsController = {
                         });
                     });
 
-                    
+
                     Promise.all(insertPromises)
                         .then(insertResults => {
                             res.status(200).json({
@@ -131,7 +129,7 @@ const sheetsController = {
         })
     },
 
-     showProgress: (req, res) => {
+    showProgress: (req, res) => {
         const userId = req.user.userId;
         const idSheet = req.params.sheetId
 
@@ -142,34 +140,34 @@ const sheetsController = {
                 return res.status(404).json({ message: "Nessuna scheda trovata o non associata all'id utente" })
             }
 
-        const countExercisesQuery = 'SELECT COUNT(*) AS total FROM exercises WHERE sheet_id = ?'
-         connection.query(countExercisesQuery, [idSheet], (err, results) => {
-          if (err) return res.status(500).json({ error: err.message })
-            if (results.length === 0) {
-                return res.status(404).json({ message: "Non è stato possibile eseguire il conteggio degli esercizi" })
-            }
-            const total = results[0].total
+            const countExercisesQuery = 'SELECT COUNT(*) AS total FROM exercises WHERE sheet_id = ?'
+            connection.query(countExercisesQuery, [idSheet], (err, results) => {
+                if (err) return res.status(500).json({ error: err.message })
+                if (results.length === 0) {
+                    return res.status(404).json({ message: "Non è stato possibile eseguire il conteggio degli esercizi" })
+                }
+                const total = results[0].total
 
 
-            const countCompletedExercisesQuery = 'SELECT COUNT(*) AS completed FROM exercises WHERE sheet_id = ? AND completed = 1'
-            connection.query(countCompletedExercisesQuery, [idSheet], (err, results) => {
-                 if (err) return res.status(500).json({ error: err.message })
-            if (results.length === 0) {
-                return res.status(404).json({ message: "Non è stato possibile eseguire il conteggio degli esercizi completati" })
-            }
-            const totalCompleted = results[0].completed
+                const countCompletedExercisesQuery = 'SELECT COUNT(*) AS completed FROM exercises WHERE sheet_id = ? AND completed = 1'
+                connection.query(countCompletedExercisesQuery, [idSheet], (err, results) => {
+                    if (err) return res.status(500).json({ error: err.message })
+                    if (results.length === 0) {
+                        return res.status(404).json({ message: "Non è stato possibile eseguire il conteggio degli esercizi completati" })
+                    }
+                    const totalCompleted = results[0].completed
 
-            res.status(200).json({
-            totalExercises: total,
-            totalCompleted: totalCompleted,
-            progress: total > 0 ? `${Math.round((totalCompleted / total) * 100)}%` : "0%"
+                    res.status(200).json({
+                        totalExercises: total,
+                        totalCompleted: totalCompleted,
+                        progress: total > 0 ? `${Math.round((totalCompleted / total) * 100)}%` : "0%"
+                    })
+                })
             })
-            })
-         })           
         })
     }
 
-    
+
 
 
 }

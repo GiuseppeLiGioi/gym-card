@@ -22,7 +22,6 @@ setLoading(true)
 
 try{
 const res = await fetchWithAuth('/sheets', { method: 'POST', body: JSON.stringify({ title: titleSheet, theme: themeSheet })})
-console.log("RESPONSE:", res);
 if(!res.ok) throw new Error("Errore nell'inserire i campi scelti");
 
 const data = await res.json()
@@ -59,9 +58,8 @@ setLoading(false);
 }
 
 useEffect(() => {
-if(token){
+if(!token) return;
 fetchSheets()
-}
 }, [token])
 
     return(

@@ -15,26 +15,34 @@ export const GlobalProvider = ({ children }) => {
 
     //funzione che aggiunge il token ad ogni chiamata fetch per verificare l'identità dell'utente.
     async function fetchWithAuth(url, options = {}) {
+        const savedToken = token || localStorage.getItem("gym_token");
+
+        if (!savedToken) {
+            navigate("/login");
+            return;
+        }
+
+        const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
         const headers = {
             ...(options.headers || {}),
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            ...(savedToken ? { Authorization: `Bearer ${savedToken}` } : {})
         }
-        try{     
-        const res = await fetch(url, { ...options, headers })
-            
-        if(!res.ok){
-            toast.error("Errore di connessione al server")
-        }
-            
-        if (res.status === 401) {
-            logout()
-            navigate('/login')
-        }
-        return res;
+        try {
+            const res = await fetch(`${baseUrl}${url}`, { ...options, headers });
 
-        }catch(error){
-          console.error(error)
+            if (!res.ok) {
+                console.error("Errore di connessione al server")
+            }
+
+            if (res.status === 401) {
+                logout()
+                navigate('/login')
+            }
+            return res;
+
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -57,7 +65,7 @@ export const GlobalProvider = ({ children }) => {
         try {
             const res = await fetchWithAuth('/auth/me')
             if (!res.ok) {
-               throw new Error('Errore durante la verifica del token utente')
+                throw new Error('Errore durante la verifica del token utente')
             }
             const data = await res.json()
 
@@ -89,11 +97,11 @@ export const GlobalProvider = ({ children }) => {
             const data = await res.json()
 
             if (!res.ok) {
-            if(res.status === 404) toast.error("E-mail errata");
-            else if(res.status === 401) toast.error("Password errata");
-            else toast.error(data.message || "Errore login");
-            return false;
-        }
+                if (res.status === 404) toast.error("E-mail errata");
+                else if (res.status === 401) toast.error("Password errata");
+                else toast.error(data.message || "Errore login");
+                return false;
+            }
 
             setIsAuthenticated(true)
             setToken(data.token)
@@ -103,33 +111,33 @@ export const GlobalProvider = ({ children }) => {
             localStorage.setItem("gym_user", JSON.stringify(data.user))
             return true;
         } catch (error) {
-          console.error("Errore login:", error.message);
+            console.error("Errore login:", error.message);
             return false;
         }
     }
 
-    
+
     async function register(name, email, password) {
         try {
             const res = await fetch('http://localhost:5000/auth/register', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({name, email, password })
+                body: JSON.stringify({ name, email, password })
             })
 
             const data = await res.json()
-            
+
             if (!res.ok) {
-            if(res.status === 409) toast.error("E-mail già registrata");
-            else toast.error(data.message || "Errore registrazione");
-            return false;
-        }
+                if (res.status === 409) toast.error("E-mail già registrata");
+                else toast.error(data.message || "Errore registrazione");
+                return false;
+            }
             await login(email, password)
             navigate('/home')
             return true;
         } catch (error) {
-        console.error("Errore login:", error.message);
-        return false;
+            console.error("Errore login:", error.message);
+            return false;
         }
     }
 
