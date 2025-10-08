@@ -424,7 +424,7 @@ ol {
 
 .btn-sheet:first-child {
   background-color: #f5a623;
-  color: #1a1a1a;
+  color: white;
 }
 
 .btn-sheet:first-child:hover {
@@ -504,6 +504,17 @@ ol {
 .btn-confirm:hover {
   background-color: #d18b1f;
 }
+.btn-sheet.green {
+  background-color: rgb(50, 243, 50);
+  color: white;
+}
+
+.btn-sheet.green:hover {
+  background-color: #0a2203;
+  transform: scale(1.02);
+}
+
+
 
 
 

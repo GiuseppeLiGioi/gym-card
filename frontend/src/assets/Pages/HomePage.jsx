@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../contexts/GlobalContext';
 import CreateSheetModal from '../Components/CreateSheetModal';
 import ConfirmModal from '../Components/ConfirmModal';
@@ -14,7 +15,7 @@ export default function HomePage() {
     const [currentSheet, setCurrentSheet] = useState({})
     const { setLoading, fetchWithAuth, token } = useGlobalContext()
     const [showConfirmModal, setShowConfirmModal] = useState(false)
-
+    const navigate = useNavigate()
     function onClose() {
         setShowModal(false)
     }
@@ -118,19 +119,28 @@ export default function HomePage() {
 
             <div className='container-sheets'>
                 {
-                    sheets.map((s, index) => (
-                        <div className='container-single-sheet' key={index}>
+                    sheets.map((s) => (
+                        <div className='container-single-sheet' key={s.id}>
                             <div className='container-info-sheet'>
                                 <h2 className='title-sheet'>{s.title}</h2>
                                 <h4 className='theme-sheet'>{s.theme}</h4>
                             </div>
 
                             <div className='container-button-sheet'>
+
                                 <button type='button' className='btn-sheet' onClick={() => {
                                     setCurrentSheet(s);
                                     setShowModal(true);
                                 }}>
                                     Modifica</button>
+
+                                <button
+                                    type='button'
+                                    className='btn-sheet green'
+                                    onClick={() => navigate(`/sheets/${s.id}`)}
+                                >
+                                    Apri
+                                </button>
 
                                 <button type='button' className='btn-sheet' onClick={() => {
                                     setCurrentSheet(s);
