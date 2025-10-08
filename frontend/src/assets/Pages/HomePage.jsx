@@ -11,70 +11,87 @@ export default function HomePage() {
     const [showModal, setShowModal] = useState(false)
     const [sheets, setSheets] = useState([])
     const [currentSheet, setCurrentSheet] = useState({})
-    const {setLoading, fetchWithAuth, token} = useGlobalContext()
+    const { setLoading, fetchWithAuth, token } = useGlobalContext()
 
-function onClose(){
-setShowModal(false)
-}
+    function onClose() {
+        setShowModal(false)
+    }
 
-async function onSave(){
-setLoading(true)
+    async function onSave() {
+        setLoading(true)
 
-try{
-const res = await fetchWithAuth('/sheets', { method: 'POST', body: JSON.stringify({ title: titleSheet, theme: themeSheet })})
-if(!res.ok) throw new Error("Errore nell'inserire i campi scelti");
+        try {
+            const res = await fetchWithAuth('/sheets', { method: 'POST', body: JSON.stringify({ title: titleSheet, theme: themeSheet }) })
+            if (!res.ok) throw new Error("Errore nell'inserire i campi scelti");
 
-const data = await res.json()
+            const data = await res.json()
 
-setSheets(data.sheets || data || [])
-
-
-}catch(error){
-console.error(error)
-}finally {
-setLoading(false);
-}
-}
+            setSheets(data.sheets || data || [])
 
 
-async function fetchSheets(){
-setLoading(true)
-
-try{
-const res = await fetchWithAuth('/sheets', { method: 'GET' })
-if(!res.ok) throw new Error("Errore nel caricamento delle schede");
-
-
-const data = await res.json()
-
-setSheets(data.sheets || data || [])
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
 
 
-}catch(error){
-console.error(error)
-}finally {
-setLoading(false);
-}
-}
+    async function fetchSheets() {
+        setLoading(true)
 
-useEffect(() => {
-if(!token) return;
-fetchSheets()
-}, [token])
+        try {
+            const res = await fetchWithAuth('/sheets', { method: 'GET' })
+            if (!res.ok) throw new Error("Errore nel caricamento delle schede");
 
-    return(
+
+            const data = await res.json()
+
+            setSheets(data.sheets || data || [])
+
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if (!token) return;
+        fetchSheets()
+    }, [token])
+
+    return (
         <>
-        
-        <div className="container-homepage">
-           <h1 className="title-home">LE TUE SCHEDE</h1>
-           <button className='btn-plus' onClick={() => {setShowModal(true), setCurrentSheet(null)}}>
-            {<FontAwesomeIcon icon={faPlus} />}
-           </button>
-        </div>
 
-        <CreateSheetModal showModal={showModal} onClose={onClose} onSave={onSave}/>
+            <div className="container-homepage">
+                <h1 className="title-home">LE TUE SCHEDE</h1>
+                <button className='btn-plus' onClick={() => { setShowModal(true), setCurrentSheet(null) }}>
+                    {<FontAwesomeIcon icon={faPlus} />}
+                </button>
+            </div>
+
+            <CreateSheetModal
+                showModal={showModal}
+                onClose={onClose}
+                onSave={(title, theme) => {
+                    setSheets(prev => [...prev, { title, theme }])
+                    onClose()
+                }} />
+
+            <div className='container-sheets'>
+                {
+                    sheets.map((s, index) => (
+                        <div className='container-single-sheet' key={index}>
+                            <h2 className='title-sheet'>{s.title}</h2>
+                            <h4 className='theme-sheet'>{s.theme}</h4>
+                        </div>
+                    ))
+                }
+            </div>
         </>
 
 
     )
- }
+}
