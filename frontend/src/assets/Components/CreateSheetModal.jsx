@@ -1,16 +1,24 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-export default function CreateSheetModal({showModal, onClose, onSave}){
+export default function CreateSheetModal({showModal, onClose, onSave, initialTheme="", initialTitle="", modalTitle = "CREA LA TUA SCHEDA", modalMessage = "Inserisci titolo e tema della scheda"}){
 
- const [titleSheet, setTitleSheet] = useState("")
-  const [themeSheet, setThemeSheet] = useState("")
+ const [titleSheet, setTitleSheet] = useState(initialTitle)
+const [themeSheet, setThemeSheet] = useState(initialTheme)
+
+useEffect(() => {
+    setTitleSheet(initialTitle);
+    setThemeSheet(initialTheme);
+}, [initialTitle, initialTheme]);
+
+if(!showModal) return null;
 
 
     return(
         showModal &&(
         <div className="container-modal">
             <div className="container-modal-inner">
-                <h2 className="modal-title">CREA LA TUA SCHEDA</h2>
+                <h2 className="modal-title">{modalTitle}</h2>
+                <p className="p-confirm-modal">{modalMessage}</p>
 
                 <div className="container-input-modal">
                 <label htmlFor="title">Titolo Scheda</label>

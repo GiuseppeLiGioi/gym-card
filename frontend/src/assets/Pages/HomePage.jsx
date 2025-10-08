@@ -21,28 +21,39 @@ export default function HomePage() {
 
     async function onSave(titleSheet, themeSheet) {
         setLoading(true);
-
         try {
-            const res = await fetchWithAuth('/sheets', {
-                method: 'POST',
-                body: JSON.stringify({ title: titleSheet, theme: themeSheet })
-            });
+            if (currentSheet?.id) {
+                // UPDATE (solo se è presente un id scheda)
+                const res = await fetchWithAuth(`/sheets/${currentSheet.id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ title: titleSheet, theme: themeSheet })
+                });
+                if (!res.ok) throw new Error("Errore nell'aggiornare la scheda");
 
-            if (!res.ok) throw new Error("Errore nell'inserire i campi scelti");
+                setSheets(prev => prev.map(s => s.id === currentSheet.id ? { ...s, title: titleSheet, theme: themeSheet } : s));
+            } else {
+                // CREATE (se non è presente id scheda, fa la create)
+                const res = await fetchWithAuth('/sheets', {
+                    method: 'POST',
+                    body: JSON.stringify({ title: titleSheet, theme: themeSheet })
+                });
+                if (!res.ok) throw new Error("Errore nel creare la scheda");
+                const data = await res.json();
+                setSheets(prev => [...prev, { id: data.sheetId, title: titleSheet, theme: themeSheet }]);
+            }
 
-            const data = await res.json();
-
-            // aggiungiamo la scheda appena creata allo stato e chiudo modale
-            setSheets(prev => [...prev, { id: data.sheetId, title: titleSheet, theme: themeSheet }]);
             setShowModal(false);
+            setCurrentSheet(null);
 
         } catch (error) {
             console.error(error);
-            toast.error("Errore nel salvataggio della scheda");
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
     }
+
+
 
     async function deleteSheet(sheetId) {
         setLoading(true);
@@ -104,10 +115,6 @@ export default function HomePage() {
                 </button>
             </div>
 
-            <CreateSheetModal
-                showModal={showModal}
-                onClose={onClose}
-                onSave={onSave} />
 
             <div className='container-sheets'>
                 {
@@ -119,9 +126,14 @@ export default function HomePage() {
                             </div>
 
                             <div className='container-button-sheet'>
-                                <button type='button' className='btn-sheet'>Modifica</button>
                                 <button type='button' className='btn-sheet' onClick={() => {
-                                    setCurrentSheet(s.id);
+                                    setCurrentSheet(s);
+                                    setShowModal(true);
+                                }}>
+                                    Modifica</button>
+
+                                <button type='button' className='btn-sheet' onClick={() => {
+                                    setCurrentSheet(s);
                                     setShowConfirmModal(true);
                                 }}>
                                     Elimina</button>
@@ -130,6 +142,14 @@ export default function HomePage() {
                     ))
                 }
             </div>
+
+            <CreateSheetModal
+                showModal={showModal}
+                onClose={onClose}
+                onSave={onSave}
+                modalTitle={currentSheet?.id ? 'MODIFICA SCHEDA' : 'CREA SCHEDA'}
+                modalMessage={currentSheet?.id ? 'Modifica il titolo e il tema della scheda' : 'Inserisci il titolo ed il tema della scheda'}
+            />
 
             <ConfirmModal
                 showModal={showConfirmModal}
