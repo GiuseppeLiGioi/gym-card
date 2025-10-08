@@ -30,7 +30,7 @@ export default function CreateSheetModal({showModal, onClose, onSave}){
                 
                 <input 
                 type="text"
-                placeholder="Inserisci il titolo della scheda"
+                placeholder="Inserisci il tema della scheda"
                 value={themeSheet}
                 onChange={(e) => setThemeSheet(e.target.value)}    
                 />
