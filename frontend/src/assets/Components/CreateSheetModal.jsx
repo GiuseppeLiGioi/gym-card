@@ -37,8 +37,8 @@ export default function CreateSheetModal({showModal, onClose, onSave}){
                 </div>   
               
             <div className="container-modal-bottom">
-                <button className="btn-modal" onClick={ () => onSave(titleSheet, themeSheet)}>Salva Scheda</button>
-                <button className="btn-modal" onClick={onClose}>Chiudi</button>
+                <button className="btn-modal" type="button" onClick={ () => onSave(titleSheet, themeSheet)}>Salva Scheda</button>
+                <button className="btn-modal" type="button" onClick={onClose}>Chiudi</button>
             </div>  
             </div>
 
