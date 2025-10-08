@@ -1,3 +1,4 @@
+import Spinner from "../Components/Spinner";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
@@ -13,7 +14,7 @@ export default function HomePage() {
     const [showModal, setShowModal] = useState(false)
     const [sheets, setSheets] = useState([])
     const [currentSheet, setCurrentSheet] = useState({})
-    const { setLoading, fetchWithAuth, token } = useGlobalContext()
+    const { setLoading, fetchWithAuth, token, loading } = useGlobalContext()
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const navigate = useNavigate()
     function onClose() {
@@ -97,7 +98,7 @@ export default function HomePage() {
         } catch (error) {
             console.error(error)
         } finally {
-            setLoading(false);
+            setTimeout(() => setLoading(false), 300);
         }
     }
 
@@ -108,6 +109,7 @@ export default function HomePage() {
 
     return (
         <>
+        {loading && <Spinner />}
 
             <div className="container-homepage">
                 <h1 className="title-home">LE TUE SCHEDE</h1>

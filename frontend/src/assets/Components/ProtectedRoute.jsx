@@ -15,13 +15,6 @@ useEffect(() => {
     navigate('/login');   
   }
 }, [loading, isAuthenticated]);
-if(loading){
-    return(
- <div className="spinner-container">
-    <div className="spinner"></div>
-</div>
-)
-}
 
 if (!isAuthenticated) {
   return null;
