@@ -17,24 +17,30 @@ export default function HomePage() {
         setShowModal(false)
     }
 
-    async function onSave() {
-        setLoading(true)
+   async function onSave(titleSheet, themeSheet) {
+    setLoading(true);
 
-        try {
-            const res = await fetchWithAuth('/sheets', { method: 'POST', body: JSON.stringify({ title: titleSheet, theme: themeSheet }) })
-            if (!res.ok) throw new Error("Errore nell'inserire i campi scelti");
+    try {
+        const res = await fetchWithAuth('/sheets', {
+            method: 'POST',
+            body: JSON.stringify({ title: titleSheet, theme: themeSheet })
+        });
 
-            const data = await res.json()
+        if (!res.ok) throw new Error("Errore nell'inserire i campi scelti");
 
-            setSheets(data.sheets || data || [])
+        const data = await res.json();
 
+        // aggiungiamo la scheda appena creata allo stato e chiudo modale
+        setSheets(prev => [...prev, { id: data.sheetId, title: titleSheet, theme: themeSheet }]);
+        setShowModal(false);
 
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false);
-        }
+    } catch (error) {
+        console.error(error);
+        toast.error("Errore nel salvataggio della scheda");
+    } finally {
+        setLoading(false);
     }
+}
 
 
     async function fetchSheets() {
@@ -75,17 +81,21 @@ export default function HomePage() {
             <CreateSheetModal
                 showModal={showModal}
                 onClose={onClose}
-                onSave={(title, theme) => {
-                    setSheets(prev => [...prev, { title, theme }])
-                    onClose()
-                }} />
+                onSave={onSave} />
 
             <div className='container-sheets'>
                 {
                     sheets.map((s, index) => (
                         <div className='container-single-sheet' key={index}>
+                            <div className='container-info-sheet'>
                             <h2 className='title-sheet'>{s.title}</h2>
                             <h4 className='theme-sheet'>{s.theme}</h4>
+                            </div>
+
+                            <div className='container-button-sheet'>
+                            <button className='btn-sheet'>Modifica</button>
+                            <button className='btn-sheet'>Elimina</button>
+                            </div>
                         </div>
                     ))
                 }

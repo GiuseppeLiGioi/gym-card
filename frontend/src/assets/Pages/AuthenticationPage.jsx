@@ -63,7 +63,7 @@ export default function AuthenticationPage() {
         }
         else if (!passwordRegex.test(password)) {
             setLoading(false)
-            toast.error("campo password non valido. Deve contenere almeno 8 caratteri, una maiuscola ed un carattere speciale")
+            toast.error("campo password non valido. Deve contenere almeno 8 caratteri, una maiuscola, un numero ed un carattere speciale")
             return;
         }
 
