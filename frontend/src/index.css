@@ -819,7 +819,6 @@ ol {
   background: transparent;
   border: none;
   color: #888;
-  /* grigio iniziale */
   font-size: 1.5rem;
   cursor: pointer;
   transition: transform 0.2s, color 0.2s;
@@ -828,13 +827,9 @@ ol {
 .btn-complete-exercise:hover {
   transform: scale(1.2);
   color: #0fa;
-  /* verde acqua su hover */
 }
-
-/* Quando l'esercizio è completato */
 .btn-complete-exercise.completed {
   color: #0ff;
-  /* verde acqua acceso */
 }
 
 
@@ -877,7 +872,6 @@ ol {
   display: block;
   font-size: 0.75rem;
   color: #80deea;
-  /* verde acqua tenue */
   margin-bottom: 0.2rem;
 }
 
