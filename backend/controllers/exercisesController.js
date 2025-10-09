@@ -20,7 +20,12 @@ const exercisesController = {
                 if (results.affectedRows === 0) return res.status(404).json({ message: "Non è stato possibile aggiungere l'esercizio" })
 
                 res.status(200).json({
-                    idExercise: results.insertId,
+                    id: results.insertId,
+                    name,
+                    sets,
+                    reps,
+                    weight,
+                    image,
                     message: "Esercizio aggiunto correttamente"
                 })
             })
@@ -29,7 +34,7 @@ const exercisesController = {
 
     showExercise: (req, res) => {
         const userId = req.user.userId
-        const sheetId = req.params.id
+        const sheetId = req.params.exerciseId
 
         const verifySheetUserQuery = 'SELECT * FROM workout_sheets WHERE id = ? AND user_id = ?'
         connection.query(verifySheetUserQuery, [sheetId, userId], (err, results) => {
@@ -49,7 +54,7 @@ const exercisesController = {
 
     editExercise: (req, res) => {
         const userId = req.user.userId
-        const exerciseId = req.params.id
+        const exerciseId = req.params.exerciseId
         const { name, sets, reps, weight, image } = req.body
 
         if (!name || !sets || !reps) {
@@ -72,7 +77,15 @@ const exercisesController = {
                     if (err) return res.status(500).json({ error: err.message })
                     if (results.affectedRows === 0) return res.status(404).json({ message: "Non è stato possibile modificare l'esercizio" })
 
-                    res.status(200).json({ message: "esercizio aggiornato con successo" })
+                    res.status(200).json({
+                        id: exerciseId,
+                        name,
+                        sets,
+                        reps,
+                        weight,
+                        image,
+                        message: "Esercizio modificato correttamente"
+                    })
                 })
             })
         })
@@ -80,9 +93,10 @@ const exercisesController = {
 
     deleteExercise: (req, res) => {
         const userId = req.user.userId
-        const exerciseId = req.params.id
-        const verifyExerciseQuery = ` SELECT e.* FROM exercises e JOIN workout_sheets w ON e.sheet_id = w.id  WHERE e.id = ? AND w.user_id = ?`;
-        connection.query(verifyExerciseQuery, [exerciseId, userId], (err, results) => {
+        const exerciseId = req.params.exerciseId
+        const sheetId = req.params.sheetId
+        const verifyExerciseQuery = ` SELECT e.* FROM exercises e JOIN workout_sheets w ON e.sheet_id = w.id  WHERE e.id = ? AND e.sheet_id = ? AND w.user_id = ?`;
+        connection.query(verifyExerciseQuery, [exerciseId,sheetId, userId], (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
             if (results.length === 0) return res.status(404).json({ message: "Esercizio non trovato o non appartiene all'utente" });
 
@@ -91,7 +105,7 @@ const exercisesController = {
                 if (err) return res.status(500).json({ error: err.message });
                 if (results.affectedRows === 0) return res.status(404).json({ message: "Non è stato possibile eliminare l'esercizio" });
 
-                res.status(200).json({ message: "Esercizio eliminato con successo" });
+                res.status(200).json({ id: exerciseId, message: "Esercizio eliminato con successo" });
             });
         });
     },

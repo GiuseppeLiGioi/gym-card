@@ -9,10 +9,10 @@ router.get('/', authMiddleware, sheetsController.showSheets)
 router.put('/:id', authMiddleware, sheetsController.editSheet)
 router.delete('/:id', authMiddleware, sheetsController.deleteSheet)
 
-router.post('/:id/exercises', authMiddleware, exercisesController.createExercise)
-router.get('/:id/exercises', authMiddleware, exercisesController.showExercise)
+router.post('/:sheetId/exercises', authMiddleware, exercisesController.createExercise)
+router.get('/:sheetId/exercises', authMiddleware, exercisesController.showExercise)
 router.put('/:sheetId/exercises/:exerciseId', authMiddleware, exercisesController.editExercise)
-router.delete('/sheetId/exercises/:exerciseId', authMiddleware, exercisesController.deleteExercise)
+router.delete('/:sheetId/exercises/:exerciseId', authMiddleware, exercisesController.deleteExercise)
 
 router.get('/:sheetId/exercises/search', authMiddleware, exercisesController.searchExercise)
 router.get('/:sheetId/progress', authMiddleware, sheetsController.showProgress)

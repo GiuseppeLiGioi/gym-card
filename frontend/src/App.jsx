@@ -66,13 +66,13 @@ function App() {
         }/>
 
 
-      <Route path="/sheet/:sheetId" element={
+      <Route path="/sheets/:sheetId" element={
         <ProtectedRoute>
           <SingleSheetPage />
         </ProtectedRoute>
        }/>
 
-      <Route path="/sheet/:sheetId/progress" element={
+      <Route path="/sheets/:sheetId/progress" element={
         <ProtectedRoute>
           <ProgressPage />
         </ProtectedRoute>

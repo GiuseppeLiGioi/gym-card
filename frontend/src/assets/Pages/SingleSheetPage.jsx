@@ -1,6 +1,12 @@
 import { useLocation, useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+
 import { useGlobalContext } from "../contexts/GlobalContext"
+import CreateExercisesModal from "../Components/CreateExercisesModal"
+
 
 export default function SingleSheetPage() {
     const location = useLocation()
@@ -17,22 +23,46 @@ export default function SingleSheetPage() {
     async function handleSave(title, sets, reps, weight, image) {
         setLoading(true);
         try {
+            let res, data;
+
+            // 🟢 CREA nuovo esercizio
             if (!currentExercise?.id) {
-                // CREATE
-                const res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {
+                res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {
                     method: "POST",
-                    body: JSON.stringify({ sheet_id: sheetId, name: title, sets, reps, weight, image })
+                    body: JSON.stringify({
+                        sheet_id: sheetId,
+                        name: title,
+                        sets,
+                        reps,
+                        weight,
+                        image
+                    }),
                 });
-                const data = await res.json();
-                setExercises(prev => [...prev, { id: data.id, name: data.title, sets: data.sets, reps: data.reps, weight: data.weight, image: data.image }]);
-            } else {
-                // UPDATE
-                const res = await fetchWithAuth(`/sheets/${sheetId}/exercises/${currentExercise.id}`, {
+
+                if (!res.ok) throw new Error("Errore nella creazione dell'esercizio");
+                data = await res.json();
+                setExercises((prev) => [...prev, data]);
+            }
+            else {
+                res = await fetchWithAuth(`/sheets/${sheetId}/exercises/${currentExercise.id}`, {
                     method: "PUT",
-                    body: JSON.stringify({ sheet_id: sheetId, name: title, sets, reps, weight, image })
+                    body: JSON.stringify({
+                        name: title,
+                        sets,
+                        reps,
+                        weight,
+                        image
+                    }),
                 });
-                const data = await res.json();
-                setExercises(prev => prev.map(e => e.id === currentExercise.id ? { ...e, name: data.title, sets: data.sets, reps: data.reps, weight: data.weight, image: data.image } : e));
+
+                if (!res.ok) throw new Error("Errore nella modifica dell'esercizio");
+                data = await res.json();
+
+                setExercises((prev) =>
+                    prev.map((e) =>
+                        e.id === currentExercise.id ? { ...e, ...data } : e
+                    )
+                );
             }
 
             setCurrentExercise(null);
@@ -48,18 +78,19 @@ export default function SingleSheetPage() {
 
 
 
-    
+
+
     async function showExercises() {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {method: "GET"})
-            if(!res.ok) throw new Error("Errore nella comunicazione server")
+            const res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, { method: "GET" })
+            if (!res.ok) throw new Error("Errore nella comunicazione server")
 
-                const data = await res.json()
-                setExercises(data)
+            const data = await res.json()
+            setExercises(data.exercises || [])
         } catch (error) {
-        console.error(error);
-        toast.error("Non è stato possibile mostrare gli esercizi");
+            console.error(error);
+            toast.error("Non è stato possibile mostrare gli esercizi");
         } finally {
             setLoading(false);
         }
@@ -67,33 +98,36 @@ export default function SingleSheetPage() {
 
 
     async function deleteExercises(exerciseId) {
-      setLoading(true);
-    
-      try {
-        console.log("Eliminazione esercizio con ID:", exerciseId);
-    
-        const res = await fetchWithAuth(`/sheets/${sheetId}/exercises${exerciseId}`, {
-          method: 'DELETE'
-        });
-    
-        if (!res.ok) {     
-          console.error("Errore dal server");
-          throw new Error("Errore nell'eliminare la scheda");
+        setLoading(true);
+
+        try {
+            console.log("Eliminazione esercizio con ID:", exerciseId);
+
+            const res = await fetchWithAuth(`/sheets/${sheetId}/exercises/${exerciseId}`, {
+                method: 'DELETE'
+            });
+
+            if (!res.ok) {
+                console.error("Errore dal server");
+                throw new Error("Errore nell'eliminare la scheda");
+            }
+
+
+            setExercises(prev => prev.filter((p) => p.id !== exerciseId));
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Errore nell'eliminazione della scheda");
+        } finally {
+            setLoading(false);
         }
-    
-        const data = await res.json();
-        
-    
-        setExercises(prev => prev.filter((p) => p.id !== exerciseId));
-    
-      } catch (error) {
-        console.error(error);
-        toast.error("Errore nell'eliminazione della scheda");
-      } finally {
-        setLoading(false);
-      }
     }
-    
+
+
+    useEffect(() => {
+        showExercises()
+    }, [sheetId])
+
 
 
 
@@ -101,20 +135,70 @@ export default function SingleSheetPage() {
         <>
 
             <div className="container-singleSheet-Page">
-                <h1 className="title-singleSheet">{title}</h1>
-                <h4 className="theme-singleSheet">{theme}</h4>
+
+                <div className="container-singleSheet-left">
+                    <h1 className="title-singleSheet">{title}</h1>
+                    <h4 className="theme-singleSheet">{theme}</h4>
+                </div>
+
                 <div className="container-singleSheet-right">
-                    <button className='btn-plus' type='button' onClick={() => { setShowExerciseModal(true), setCurrentExercise(null) }}>
-                        {<FontAwesomeIcon icon={faPlus} />}
+                    <button
+                        className='btn-plus-exercise'
+                        type='button'
+                        onClick={() => { setShowExerciseModal(true); setCurrentExercise(null); }}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>
 
             </div>
 
-            <div className="container-exercises">
-                
+            <div className='container-exercise'>
+                {
+                    exercises.map((e) => (
+                        <div className='container-single-exercise' key={e.id}>
+                            <div className='container-info-exercise'>
+                                <h2 className='title-exercise'><span className="span-exercise">Nome Esercizio</span>{e.name}</h2>
+                                <img className="image-exercise" src={e.image} alt="fotoexercise" />
+                                <div className="container-info-bottom-exercise">
 
+                                <h4 className='steps-exercise'><span className="span-exercise">Serie Esercizio</span>{e.sets}</h4>
+                                <p className="reps-exercise"><span className="span-exercise">Ripetizioni x Serie Esercizio</span>{e.reps}</p>
+                                <p className="weight-exercise"><span className="span-exercise">Peso Ogni Ripetizione</span>{e.weight}</p>
+                                </div>
+                            </div>
+
+                            <div className='container-button-exercise'>
+
+                                <button type='button' className='btn-exercise' onClick={() => {
+                                    setCurrentExercise(e);
+                                    setShowExerciseModal(true);
+
+                                }}>
+                                    Modifica</button>
+
+
+                                <button type='button' className='btn-exercise' onClick={() => {
+                                    deleteExercises(e.id)
+                                    setCurrentExercise(e.id);
+                                    setShowExerciseModal(false)
+
+                                }}>
+                                    Elimina</button>
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
+
+            <CreateExercisesModal
+                showExerciseModal={showExerciseModal}
+                onClose={() => setShowExerciseModal(false)}
+                onSave={handleSave}
+
+                modalTitle={currentExercise?.id ? 'MODIFICA ESERCIZIO' : 'AGGIUNGI ESERCIZIO'}
+                modalMessage={currentExercise?.id ? 'Modifica il titolo e il tema dell esercizio' : 'Inserisci il titolo ed il tema dell esercizio'}
+            />
         </>
     )
 }
