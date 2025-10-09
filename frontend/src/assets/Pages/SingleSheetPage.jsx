@@ -15,39 +15,86 @@ export default function SingleSheetPage() {
 
 
     async function handleSave(title, sets, reps, weight, image) {
-        setLoading(true)
+        setLoading(true);
         try {
             if (!currentExercise?.id) {
+                // CREATE
                 const res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {
                     method: "POST",
-                    body: JSON.stringify({ sheet_id: sheetId, name: nameExercise, sets: setsExercise, reps: repsExercise, weight: weightExercise, image: imageExercise })
-                })
-                if (!res.ok) {
-                    throw new Error('errore nella creazione di un esercizio')
-                }
-                const data = await res.json()
-                setExercises(prev => [...prev, { id: data.id, name: nameExercise, sets: data.setsExercise, reps: data.repsExercise, weight: data.weightExercise, image: data.imageExercise }])
-
-
-
-            } else { currentExercise?.id } {
+                    body: JSON.stringify({ sheet_id: sheetId, name: title, sets, reps, weight, image })
+                });
+                const data = await res.json();
+                setExercises(prev => [...prev, { id: data.id, name: data.title, sets: data.sets, reps: data.reps, weight: data.weight, image: data.image }]);
+            } else {
+                // UPDATE
                 const res = await fetchWithAuth(`/sheets/${sheetId}/exercises/${currentExercise.id}`, {
-                    method: "POST",
-                    body: JSON.stringify({ sheet_id: sheetId, name: nameExercise, sets: setsExercise, reps: repsExercise, weight: weightExercise, image: imageExercise })
-                })
-
-                if (!res.ok) {
-                    throw new Error('errore nella creazione di un esercizio')
-                }
-                const data = await res.json()
-                setExercises(prev => prev.map(e => e.id === currentExercise.id ? {...e, id: data.id, name: nameExercise, sets: data.setsExercise, reps: data.repsExercise, weight: data.weightExercise, image: data.imageExercise } : e))
+                    method: "PUT",
+                    body: JSON.stringify({ sheet_id: sheetId, name: title, sets, reps, weight, image })
+                });
+                const data = await res.json();
+                setExercises(prev => prev.map(e => e.id === currentExercise.id ? { ...e, name: data.title, sets: data.sets, reps: data.reps, weight: data.weight, image: data.image } : e));
             }
 
+            setCurrentExercise(null);
+            setShowExerciseModal(false);
         } catch (error) {
-            console.error(error)
-            toast.error("Non è stato possbile completare l'operazione")
+            console.error(error);
+            toast.error("Non è stato possibile completare l'operazione");
+        } finally {
+            setLoading(false);
         }
     }
+
+
+
+
+    
+    async function showExercises() {
+        setLoading(true);
+        try {
+            const res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {method: "GET"})
+            if(!res.ok) throw new Error("Errore nella comunicazione server")
+
+                const data = await res.json()
+                setExercises(data)
+        } catch (error) {
+        console.error(error);
+        toast.error("Non è stato possibile mostrare gli esercizi");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+    async function deleteExercises(exerciseId) {
+      setLoading(true);
+    
+      try {
+        console.log("Eliminazione esercizio con ID:", exerciseId);
+    
+        const res = await fetchWithAuth(`/sheets/${sheetId}/exercises${exerciseId}`, {
+          method: 'DELETE'
+        });
+    
+        if (!res.ok) {     
+          console.error("Errore dal server");
+          throw new Error("Errore nell'eliminare la scheda");
+        }
+    
+        const data = await res.json();
+        
+    
+        setExercises(prev => prev.filter((p) => p.id !== exerciseId));
+    
+      } catch (error) {
+        console.error(error);
+        toast.error("Errore nell'eliminazione della scheda");
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+
 
 
     return (
@@ -65,7 +112,7 @@ export default function SingleSheetPage() {
             </div>
 
             <div className="container-exercises">
-
+                
 
             </div>
         </>
