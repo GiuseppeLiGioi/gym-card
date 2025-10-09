@@ -3,10 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../contexts/GlobalContext';
 import CreateSheetModal from '../Components/CreateSheetModal';
 import ConfirmModal from '../Components/ConfirmModal';
+
 
 
 
@@ -33,6 +34,8 @@ export default function HomePage() {
                 if (!res.ok) throw new Error("Errore nell'aggiornare la scheda");
 
                 setSheets(prev => prev.map(s => s.id === currentSheet.id ? { ...s, title: titleSheet, theme: themeSheet } : s));
+
+                
             } else {
                 // CREATE (se non è presente id scheda, fa la create)
                 const res = await fetchWithAuth('/sheets', {
@@ -56,29 +59,37 @@ export default function HomePage() {
     }
 
 
+async function deleteSheet(sheetId) {
+  setLoading(true);
 
-    async function deleteSheet(sheetId) {
-        setLoading(true);
+  try {
+    console.log("Eliminazione scheda con ID:", sheetId);
 
-        try {
-            const res = await fetchWithAuth(`/sheets/${sheetId}`, {
-                method: 'DELETE'
-            });
+    const res = await fetchWithAuth(`/sheets/${sheetId}`, {
+      method: 'DELETE'
+    });
 
-            if (!res.ok) throw new Error("Errore nell'eliminare la scheda");
+    console.log("Status:", res.status);
 
-            const data = await res.json();
-
-            // aggiungiamo la scheda appena creata allo stato e chiudo modale
-            setSheets(prev => prev.filter((p) => p.id !== sheetId));
-
-        } catch (error) {
-            console.error(error);
-            toast.error("Errore nell'eliminazione della scheda");
-        } finally {
-            setLoading(false);
-        }
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Errore dal server:", errText);
+      throw new Error("Errore nell'eliminare la scheda");
     }
+
+    const data = await res.json();
+    console.log("Risposta eliminazione:", data);
+
+    setSheets(prev => prev.filter((p) => p.id !== sheetId));
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Errore nell'eliminazione della scheda");
+  } finally {
+    setLoading(false);
+  }
+}
+
 
 
 
@@ -139,13 +150,13 @@ export default function HomePage() {
                                 <button
                                     type='button'
                                     className='btn-sheet green'
-                                    onClick={() => navigate(`/sheets/${s.id}`)}
+                                    onClick={() => navigate(`/sheets/${s.id}`, {state: {title: s.title, theme: s.theme}})}
                                 >
                                     Apri
                                 </button>
 
                                 <button type='button' className='btn-sheet' onClick={() => {
-                                    setCurrentSheet(s);
+                                    setCurrentSheet(s.id);
                                     setShowConfirmModal(true);
                                 }}>
                                     Elimina</button>

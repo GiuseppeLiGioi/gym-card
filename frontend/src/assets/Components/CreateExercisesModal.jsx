@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
-export default function CreateExercisesModal(){
+export default function CreateExercisesModal({showModal, onClose, onSave, modalTitle = "CREA L'ESERCIZIO", modalMessage = "Inserisci i dati dell'esercizio"}){
 const [titleExercise, setTitleExercise] = useState("")
 const [setsExercise, setSetsExercise] = useState(0)
 const [repsExercise, setRepsExercise] = useState(0)
