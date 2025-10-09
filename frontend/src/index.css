@@ -807,6 +807,81 @@ ol {
   background-color: #777;
 }
 
+/* HEADER CON BOTTONE COMPLETA */
+.exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.btn-complete-exercise {
+  background: transparent;
+  border: none;
+  color: #888;
+  /* grigio iniziale */
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.btn-complete-exercise:hover {
+  transform: scale(1.2);
+  color: #0fa;
+  /* verde acqua su hover */
+}
+
+/* Quando l'esercizio è completato */
+.btn-complete-exercise.completed {
+  color: #0ff;
+  /* verde acqua acceso */
+}
+
+
+/* CONTAINER ESERCIZIO COMPLETATO */
+.container-single-exercise.completed .title-exercise,
+.container-single-exercise.completed .steps-exercise,
+.container-single-exercise.completed .reps-exercise,
+.container-single-exercise.completed .weight-exercise {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* IMAGE */
+.image-exercise {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.15);
+}
+
+/* CONTAINER INFO BOTTOM (row) */
+.container-info-bottom-exercise {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.container-info-bottom-exercise h4,
+.container-info-bottom-exercise p {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #cfd8dc;
+}
+
+.span-exercise {
+  display: block;
+  font-size: 0.75rem;
+  color: #80deea;
+  /* verde acqua tenue */
+  margin-bottom: 0.2rem;
+}
+
+
 
 /* Media query TABLET */
 @media (min-width: 768px) {
@@ -920,6 +995,21 @@ ol {
     padding: 0.6rem 1rem;
   }
 
+  .btn-complete-exercise {
+    font-size: 1.2rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .complete-exercise-icon {
+    font-size: 1.3rem;
+  }
+
+  .container-single-exercise {
+    gap: 1rem;
+  }
+
+
+
 }
 
 /* Media query DESKTOP */
@@ -1025,5 +1115,18 @@ ol {
   .reps-exercise,
   .weight-exercise {
     padding: 0.8rem 1.2rem;
+  }
+
+   .btn-complete-exercise {
+    font-size: 1.3rem;
+    padding: 0.7rem 1.2rem;
+  }
+
+  .complete-exercise-icon {
+    font-size: 1.5rem;
+  }
+
+  .container-single-exercise {
+    gap: 1.2rem;
   }
 }

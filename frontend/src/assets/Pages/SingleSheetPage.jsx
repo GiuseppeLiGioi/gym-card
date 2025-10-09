@@ -2,7 +2,7 @@ import { useLocation, useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
 import { useGlobalContext } from "../contexts/GlobalContext"
 import CreateExercisesModal from "../Components/CreateExercisesModal"
@@ -123,6 +123,15 @@ export default function SingleSheetPage() {
         }
     }
 
+    const handleComplete = (exerciseId) => {
+        setExercises(prev =>
+            prev.map(e =>
+                e.id === exerciseId ? { ...e, completed: !e.completed } : e
+            )
+        );
+    };
+
+
 
     useEffect(() => {
         showExercises()
@@ -156,35 +165,52 @@ export default function SingleSheetPage() {
             <div className='container-exercise'>
                 {
                     exercises.map((e) => (
-                        <div className='container-single-exercise' key={e.id}>
-                            <div className='container-info-exercise'>
-                                <h2 className='title-exercise'><span className="span-exercise">Nome Esercizio</span>{e.name}</h2>
-                                <img className="image-exercise" src={e.image} alt="fotoexercise" />
-                                <div className="container-info-bottom-exercise">
+                        <div key={e.id}
+                            className={e.completed ? 'container-single-exercise completed' : 'container-single-exercise'}>
 
-                                <h4 className='steps-exercise'><span className="span-exercise">Serie Esercizio</span>{e.sets}</h4>
-                                <p className="reps-exercise"><span className="span-exercise">Ripetizioni x Serie Esercizio</span>{e.reps}</p>
-                                <p className="weight-exercise"><span className="span-exercise">Peso Ogni Ripetizione</span>{e.weight}</p>
+                            <div className='container-info-exercise'>
+                                <div className="exercise-header">
+                                    <h2 className='title-exercise'>
+                                        <span className="span-exercise">Nome Esercizio</span>{e.name}
+                                    </h2>
+                                    <button
+                                        className={`btn-complete-exercise ${e.completed ? 'completed' : ''}`}
+                                        onClick={() => handleComplete(e.id)}
+                                    >
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                    </button>
+                                </div>
+
+                                <img className="image-exercise" src={e.image} alt="fotoexercise" />
+
+                                <div className="container-info-bottom-exercise">
+                                    <h4 className='steps-exercise'>
+                                        <span className="span-exercise">Serie Esercizio</span>{e.sets}
+                                    </h4>
+                                    <p className="reps-exercise">
+                                        <span className="span-exercise">Ripetizioni x Serie Esercizio</span>{e.reps}
+                                    </p>
+                                    <p className="weight-exercise">
+                                        <span className="span-exercise">Peso Ogni Ripetizione</span>{e.weight}
+                                    </p>
                                 </div>
                             </div>
 
                             <div className='container-button-exercise'>
-
                                 <button type='button' className='btn-exercise' onClick={() => {
                                     setCurrentExercise(e);
                                     setShowExerciseModal(true);
-
                                 }}>
-                                    Modifica</button>
-
+                                    Modifica
+                                </button>
 
                                 <button type='button' className='btn-exercise' onClick={() => {
-                                    deleteExercises(e.id)
+                                    deleteExercises(e.id);
                                     setCurrentExercise(e.id);
-                                    setShowExerciseModal(false)
-
+                                    setShowExerciseModal(false);
                                 }}>
-                                    Elimina</button>
+                                    Elimina
+                                </button>
                             </div>
                         </div>
                     ))
