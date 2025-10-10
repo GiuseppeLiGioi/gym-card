@@ -88,6 +88,12 @@ export default function SingleSheetPage() {
 
             const data = await res.json()
             const exercisesArray = Array.isArray(data) ? data : data.exercises;
+            
+            for(let i = 0; i < exercisesArray.length; i++){
+                exercisesArray[i].completed = false
+            }
+
+
             if (!exercisesArray || exercisesArray.length === 0) {
                 toast.info("Ancora nessun esercizio creato");
                 setExercises([]);
@@ -135,6 +141,13 @@ export default function SingleSheetPage() {
             )
         );
     };
+
+
+    function completedExercise(id){
+        let VerifyExercise = []
+       VerifyExercise = exercises.map((e) => e.id === id ? {...e, completed: !e.completed} : e)
+       setExercises(VerifyExercise)
+    }
 
 
 
