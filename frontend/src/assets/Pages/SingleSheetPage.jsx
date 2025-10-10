@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCircleCheck } from '@fortawesome/free-solid-svg-icons'
@@ -15,6 +15,8 @@ export default function SingleSheetPage() {
     const [currentExercise, setCurrentExercise] = useState(null)
     const [exercises, setExercises] = useState([])
     const [sheet, setSheet] = useState(null)
+    const [timer, setTimer] = useState(180)
+    const [intervalId, setIntervalId] = useState(null)
 
     const { sheetId } = useParams()
     const { fetchWithAuth, setLoading } = useGlobalContext()
@@ -88,8 +90,8 @@ export default function SingleSheetPage() {
 
             const data = await res.json()
             const exercisesArray = Array.isArray(data) ? data : data.exercises;
-            
-            for(let i = 0; i < exercisesArray.length; i++){
+
+            for (let i = 0; i < exercisesArray.length; i++) {
                 exercisesArray[i].completed = false
             }
 
@@ -134,20 +136,65 @@ export default function SingleSheetPage() {
         }
     }
 
-    const handleComplete = (exerciseId) => {
-        setExercises(prev =>
-            prev.map(e =>
-                e.id === exerciseId ? { ...e, completed: !e.completed } : e
-            )
-        );
-    };
 
 
-    function completedExercise(id){
-        let VerifyExercise = []
-       VerifyExercise = exercises.map((e) => e.id === id ? {...e, completed: !e.completed} : e)
-       setExercises(VerifyExercise)
+    function checkAllCompleted() {
+        return exercises.every((e) => e.completed === true)
     }
+
+    const intervalRef = useRef(null);
+
+    function handleComplete(id) {
+        setExercises((prevExercises) => {
+            const updatedExercises = prevExercises.map((e) =>
+                e.id === id ? { ...e, completed: !e.completed } : e
+            );
+
+            const allCompleted = updatedExercises.every((e) => e.completed);
+
+            if (allCompleted && !intervalRef.current) {
+                startTimer();
+            } else if (!allCompleted && intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+                setTimer(180);
+            }
+
+            return updatedExercises;
+        });
+    }
+
+    function startTimer() {
+        if (intervalRef.current) return;
+        setTimer(180);
+
+        intervalRef.current = setInterval(() => {
+            setTimer((prev) => {
+                if (prev <= 1) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+
+                    
+                    setExercises((prevExercises) =>
+                        prevExercises.map((e) => ({ ...e, completed: false }))
+                    );
+
+                    setTimer(180); 
+                    return 180;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -162,7 +209,6 @@ export default function SingleSheetPage() {
         <>
 
             <div className="container-singleSheet-Page">
-
                 <div className="container-singleSheet-left">
                     <h1 className="title-singleSheet">{title}</h1>
                     <h4 className="theme-singleSheet">{theme}</h4>
@@ -170,15 +216,31 @@ export default function SingleSheetPage() {
 
                 <div className="container-singleSheet-right">
                     <button
-                        className='btn-plus-exercise'
-                        type='button'
-                        onClick={() => { setShowExerciseModal(true); setCurrentExercise(null); }}
+                        className="btn-plus-exercise"
+                        type="button"
+                        onClick={() => {
+                            setShowExerciseModal(true);
+                            setCurrentExercise(null);
+                        }}
                     >
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>
+            </div>
+
+            <div className="container-timer">
+
+                <div className="timer-pill">
+                    <span className="timer-label">Recupero:</span>
+                    <span className="timer-value">
+                        {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, "0")}
+                    </span>
+
+
+                </div>
 
             </div>
+
 
             <div className='container-exercise'>
                 {
@@ -193,7 +255,11 @@ export default function SingleSheetPage() {
                                     </h2>
                                     <button
                                         className={`btn-complete-exercise ${e.completed ? 'completed' : ''}`}
-                                        onClick={() => handleComplete(e.id)}
+                                        onClick={() => {
+                                            handleComplete(e.id);
+                                            checkAllCompleted();
+                                            startTimer();
+                                        }}
                                     >
                                         <FontAwesomeIcon icon={faCircleCheck} />
                                     </button>
@@ -203,13 +269,13 @@ export default function SingleSheetPage() {
 
                                 <div className="container-info-bottom-exercise">
                                     <h4 className='steps-exercise'>
-                                        <span className="span-exercise">Serie Esercizio</span>{e.sets}
+                                        <span className="span-exercise">Serie</span>{e.sets}
                                     </h4>
                                     <p className="reps-exercise">
-                                        <span className="span-exercise">Ripetizioni x Serie Esercizio</span>{e.reps}
+                                        <span className="span-exercise">Ripetizioni</span>{e.reps}
                                     </p>
                                     <p className="weight-exercise">
-                                        <span className="span-exercise">Peso Ogni Ripetizione</span>{e.weight}
+                                        <span className="span-exercise">Peso x rep.</span>{e.weight}
                                     </p>
                                 </div>
                             </div>
