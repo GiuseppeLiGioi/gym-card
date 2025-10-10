@@ -34,18 +34,17 @@ const exercisesController = {
 
     showExercise: (req, res) => {
         const userId = req.user.userId
-        const sheetId = req.params.exerciseId
+        const sheetId = req.params.sheetId
 
         const verifySheetUserQuery = 'SELECT * FROM workout_sheets WHERE id = ? AND user_id = ?'
         connection.query(verifySheetUserQuery, [sheetId, userId], (err, results) => {
             if (err) return res.status(500).json({ error: err.message })
-            if (results.length === 0) return res.status(404).json({ message: "Nessuna scheda allenamento trovata associata al tuo Id" })
+            if (results.length === 0) return res.status(404).json({ message: "Nessuna esercizio trovato associato al tuo id" })
 
             const showExercisesQuery = 'SELECT * FROM exercises WHERE sheet_id = ?'
             connection.query(showExercisesQuery, [sheetId], (err, results) => {
                 if (err) return res.status(500).json({ error: err.message })
-                if (results.length === 0) return res.status(404).json({ message: "Non è stato possibile mostrare gli esercizi" })
-
+                
                 res.status(200).json({ exercises: results })
             })
         })

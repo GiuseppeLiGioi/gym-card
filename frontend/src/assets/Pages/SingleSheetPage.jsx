@@ -87,10 +87,15 @@ export default function SingleSheetPage() {
             if (!res.ok) throw new Error("Errore nella comunicazione server")
 
             const data = await res.json()
-            setExercises(data.exercises || [])
+            const exercisesArray = Array.isArray(data) ? data : data.exercises;
+            if (!exercisesArray || exercisesArray.length === 0) {
+                toast.info("Ancora nessun esercizio creato");
+                setExercises([]);
+                return;
+            }
+            setExercises(exercisesArray)
         } catch (error) {
             console.error(error);
-            toast.error("Non è stato possibile mostrare gli esercizi");
         } finally {
             setLoading(false);
         }
