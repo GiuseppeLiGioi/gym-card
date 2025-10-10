@@ -636,7 +636,6 @@ ol {
 
 
 
-/* ====== CONTAINER ESERCIZI ====== */
 .container-exercise {
   display: flex;
   flex-direction: column;
@@ -669,7 +668,6 @@ ol {
   flex-direction: column;
   align-items: center;
   background-color: #1c1c1c;
-  /* dark card background */
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -681,13 +679,21 @@ ol {
   box-shadow: 0 5px 15px rgba(0, 191, 166, 0.4);
 }
 
-/* ====== TITOLO ====== */
+/* ====== HEADER ESERCIZIO ====== */
+.exercise-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
 .title-exercise {
   font-size: 1.4rem;
   font-weight: 700;
   color: #f5f5f5;
   text-align: center;
-  margin-bottom: 0.5rem;
 }
 
 .span-exercise {
@@ -699,15 +705,15 @@ ol {
   margin-bottom: 2px;
 }
 
-/* ====== IMMAGINE ====== */
+/* ====== IMMAGINE ESERCIZIO ====== */
 .image-exercise {
   width: 100%;
-  max-width: 300px;
+  max-width: 200px;
   border-radius: 0.8rem;
   border: 1px solid #00bfa6;
   box-shadow: 0 0 8px rgba(0, 191, 166, 0.3);
   object-fit: cover;
-  margin-bottom: 0.8rem;
+  margin: 0.5rem 0 1rem 0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -719,10 +725,9 @@ ol {
 /* ====== BOTTOM INFO (3 VOCI) ====== */
 .container-info-bottom-exercise {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100%;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -736,6 +741,7 @@ ol {
   padding: 0.5rem 0.8rem;
   border-radius: 0.6rem;
   color: #ddd;
+  flex: 1;
   min-width: 80px;
   transition: background-color 0.3s ease;
 }
@@ -1032,22 +1038,25 @@ ol {
     padding: 1.5rem;
   }
 
-  .title-exercise {
-    font-size: 1.5rem;
-  }
-
-  .image-exercise {
-    max-width: 260px;
-  }
+ 
 
   .container-info-bottom-exercise {
     gap: 0.8rem;
+  }
+
+   .image-exercise {
+    max-width: 250px;
+  }
+
+  .title-exercise {
+    font-size: 1.6rem;
   }
 
   .steps-exercise,
   .reps-exercise,
   .weight-exercise {
     padding: 0.6rem 1rem;
+    min-width: 90px;
   }
 
   .btn-complete-exercise {
@@ -1153,24 +1162,25 @@ ol {
   .container-info-exercise {
     padding: 2rem;
   }
-
-  .title-exercise {
-    font-size: 1.7rem;
+  .container-info-bottom-exercise {
+    gap: 1rem;
   }
-
-  .image-exercise {
+   .image-exercise {
     max-width: 300px;
   }
 
-  .container-info-bottom-exercise {
-    gap: 1rem;
+  .title-exercise {
+    font-size: 1.8rem;
   }
 
   .steps-exercise,
   .reps-exercise,
   .weight-exercise {
-    padding: 0.8rem 1.2rem;
+    padding: 0.7rem 1.2rem;
+    min-width: 100px;
   }
+
+ 
 
   .btn-complete-exercise {
     font-size: 1.3rem;

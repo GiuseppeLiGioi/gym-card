@@ -252,7 +252,7 @@ export default function SingleSheetPage() {
                                     className="image-exercise"
                                     src={e.image ? `http://localhost:5000${e.image}` : "/placeholder.png"}
                                     alt={e.name}
-                                    style={{ width: "100px", height: "100px", objectFit: "cover" }} />
+                                 />
 
 
                                 <div className="container-info-bottom-exercise">
