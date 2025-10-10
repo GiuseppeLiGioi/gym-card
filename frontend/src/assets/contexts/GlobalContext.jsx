@@ -14,37 +14,25 @@ export const GlobalProvider = ({ children }) => {
 
 
     //funzione che aggiunge il token ad ogni chiamata fetch per verificare l'identità dell'utente.
-    async function fetchWithAuth(url, options = {}) {
+    async function fetchWithAuth(url, options = {}, skipContentType = false) {
         const savedToken = token || localStorage.getItem("gym_token");
-
-        if (!savedToken) {
-            navigate("/login");
-            return;
-        }
+        if (!savedToken) return navigate("/login");
 
         const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
         const headers = {
             ...(options.headers || {}),
-            "Content-Type": "application/json",
-            ...(savedToken ? { Authorization: `Bearer ${savedToken}` } : {})
+            ...(savedToken ? { Authorization: `Bearer ${savedToken}` } : {}),
+        };
+        if (!skipContentType) headers["Content-Type"] = "application/json";
+
+        const res = await fetch(`${baseUrl}${url}`, { ...options, headers });
+        if (res.status === 401) {
+            logout();
+            navigate("/login");
         }
-        try {
-            const res = await fetch(`${baseUrl}${url}`, { ...options, headers });
-
-            if (!res.ok) {
-                console.error("Errore di connessione al server")
-            }
-
-            if (res.status === 401) {
-                logout()
-                navigate('/login')
-            }
-            return res;
-
-        } catch (error) {
-            console.error(error)
-        }
+        return res;
     }
+
 
     function updateUser(newUserData) {
         setUser(newUserData)

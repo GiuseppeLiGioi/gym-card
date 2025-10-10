@@ -21,47 +21,29 @@ export default function SingleSheetPage() {
     const { sheetId } = useParams()
     const { fetchWithAuth, setLoading } = useGlobalContext()
 
-    async function handleSave(title, sets, reps, weight, imageFile) {
+    async function handleSave(title, sets, reps, weight, imageFile, imageURL) {
         setLoading(true);
         try {
-            let res, data;
-
             const formData = new FormData();
             formData.append("sheet_id", sheetId);
             formData.append("name", title);
             formData.append("sets", sets);
             formData.append("reps", reps);
             formData.append("weight", weight);
-            if (imageFile) formData.append("image", imageFile);
+            if (imageFile instanceof File) formData.append("image", imageFile);
+            else if (imageURL) formData.append("image_url", imageURL);
 
-            // 🟢 CREA nuovo esercizio
-            if (!currentExercise?.id) {
-                res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {
-                    method: "POST",
-                    body: formData,
-                });
+            const res = await fetch(`http://localhost:5000/sheets/${sheetId}/exercises`, {
+                method: currentExercise?.id ? "PUT" : "POST",
+                body: formData,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("gym_token")}`
+                }
+            });
 
-                if (!res.ok) throw new Error("Errore nella creazione dell'esercizio");
-                data = await res.json();
-                setExercises((prev) => [...prev, data]);
-            }
-            // 🟡 MODIFICA esercizio
-            else {
-                res = await fetchWithAuth(`/sheets/${sheetId}/exercises/${currentExercise.id}`, {
-                    method: "PUT",
-                    body: formData,
-                });
-
-                if (!res.ok) throw new Error("Errore nella modifica dell'esercizio");
-                data = await res.json();
-
-                setExercises((prev) =>
-                    prev.map((e) =>
-                        e.id === currentExercise.id ? { ...e, ...data } : e
-                    )
-                );
-            }
-
+            if (!res.ok) throw new Error("Errore nella creazione/modifica dell'esercizio");
+            const data = await res.json();
+            setExercises(prev => currentExercise?.id ? prev.map(e => e.id === currentExercise.id ? { ...e, ...data } : e) : [...prev, data]);
             setCurrentExercise(null);
             setShowExerciseModal(false);
         } catch (error) {
@@ -71,6 +53,10 @@ export default function SingleSheetPage() {
             setLoading(false);
         }
     }
+
+
+
+
 
 
 
@@ -90,6 +76,7 @@ export default function SingleSheetPage() {
             for (let i = 0; i < exercisesArray.length; i++) {
                 exercisesArray[i].completed = false
             }
+            console.log("Esercizi recuperati:", exercisesArray);
 
 
             if (!exercisesArray || exercisesArray.length === 0) {
@@ -261,7 +248,12 @@ export default function SingleSheetPage() {
                                     </button>
                                 </div>
 
-                                <img className="image-exercise" src={e.image} alt="fotoexercise" />
+                                <img
+                                    className="image-exercise"
+                                    src={e.image ? `http://localhost:5000${e.image}` : "/placeholder.png"}
+                                    alt={e.name}
+                                    style={{ width: "100px", height: "100px", objectFit: "cover" }} />
+
 
                                 <div className="container-info-bottom-exercise">
                                     <h4 className='steps-exercise'>
@@ -293,9 +285,11 @@ export default function SingleSheetPage() {
                                 </button>
                             </div>
                         </div>
+
                     ))
                 }
             </div>
+
 
             <CreateExercisesModal
                 showExerciseModal={showExerciseModal}
@@ -305,6 +299,7 @@ export default function SingleSheetPage() {
                 modalTitle={currentExercise?.id ? 'MODIFICA ESERCIZIO' : 'AGGIUNGI ESERCIZIO'}
                 modalMessage={currentExercise?.id ? 'Modifica il titolo e il tema dell esercizio' : 'Inserisci il titolo ed il tema dell esercizio'}
             />
+
         </>
     )
 }
