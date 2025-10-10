@@ -21,40 +21,35 @@ export default function SingleSheetPage() {
     const { sheetId } = useParams()
     const { fetchWithAuth, setLoading } = useGlobalContext()
 
-
-    async function handleSave(title, sets, reps, weight, image) {
+    async function handleSave(title, sets, reps, weight, imageFile) {
         setLoading(true);
         try {
             let res, data;
+
+            const formData = new FormData();
+            formData.append("sheet_id", sheetId);
+            formData.append("name", title);
+            formData.append("sets", sets);
+            formData.append("reps", reps);
+            formData.append("weight", weight);
+            if (imageFile) formData.append("image", imageFile);
 
             // 🟢 CREA nuovo esercizio
             if (!currentExercise?.id) {
                 res = await fetchWithAuth(`/sheets/${sheetId}/exercises`, {
                     method: "POST",
-                    body: JSON.stringify({
-                        sheet_id: sheetId,
-                        name: title,
-                        sets,
-                        reps,
-                        weight,
-                        image
-                    }),
+                    body: formData,
                 });
 
                 if (!res.ok) throw new Error("Errore nella creazione dell'esercizio");
                 data = await res.json();
                 setExercises((prev) => [...prev, data]);
             }
+            // 🟡 MODIFICA esercizio
             else {
                 res = await fetchWithAuth(`/sheets/${sheetId}/exercises/${currentExercise.id}`, {
                     method: "PUT",
-                    body: JSON.stringify({
-                        name: title,
-                        sets,
-                        reps,
-                        weight,
-                        image
-                    }),
+                    body: formData,
                 });
 
                 if (!res.ok) throw new Error("Errore nella modifica dell'esercizio");
@@ -76,6 +71,7 @@ export default function SingleSheetPage() {
             setLoading(false);
         }
     }
+
 
 
 
@@ -174,12 +170,12 @@ export default function SingleSheetPage() {
                     clearInterval(intervalRef.current);
                     intervalRef.current = null;
 
-                    
+
                     setExercises((prevExercises) =>
                         prevExercises.map((e) => ({ ...e, completed: false }))
                     );
 
-                    setTimer(180); 
+                    setTimer(180);
                     return 180;
                 }
                 return prev - 1;

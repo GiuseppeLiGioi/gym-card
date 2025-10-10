@@ -62,7 +62,7 @@ const [imageExercise, setImageExercise] = useState("")
                   <div className="container-input-modal">
                 <label htmlFor="theme">Immagine esercizio:</label>
                  <input 
-                type="text"
+                type="file"
                 placeholder="Inserisci l'url immagine dell' esercizio"
                 value={imageExercise}
                 onChange={(e) => setImageExercise(e.target.value)}    
