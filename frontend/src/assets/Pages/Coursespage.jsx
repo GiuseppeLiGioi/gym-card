@@ -1,4 +1,10 @@
 import { useNavigate } from "react-router-dom"
+import bodybuildingImg from '../images/courses/bodybuilding.jpg';
+import cardioImg from '../images/courses/cardio.jpg';
+import yogaImg from '../images/courses/yoga.jpg';
+import functionalImg from '../images/courses/functional.jpg';
+import crossfitImg from '../images/courses/crossfit.jpg';
+import pilatesImg from '../images/courses/pilates.jpg';
 
 export default function CoursesPage() {
     const navigate = useNavigate()
@@ -9,7 +15,7 @@ export default function CoursesPage() {
             description: "Impara le fondamenta dell’allenamento con i pesi e costruisci forza in modo sicuro ed efficace.",
             level: "Principiante",
             price: "39.99",
-            image: "/assets/courses/bodybuilding.jpg"
+            image: bodybuildingImg
         },
         {
             id: 2,
@@ -17,7 +23,7 @@ export default function CoursesPage() {
             description: "Allenamenti ad alta intensità per migliorare la resistenza e bruciare calorie in modo dinamico.",
             level: "Intermedio",
             price: "34.99",
-            image: "/assets/courses/cardio.jpg"
+            image: cardioImg
         },
         {
             id: 3,
@@ -25,7 +31,7 @@ export default function CoursesPage() {
             description: "Ritrova equilibrio e flessibilità con sessioni di yoga guidate per corpo e mente.",
             level: "Tutti i livelli",
             price: "29.99",
-            image: "/assets/courses/yoga.jpg"
+            image: yogaImg
         },
         {
             id: 4,
@@ -33,7 +39,7 @@ export default function CoursesPage() {
             description: "Allenati in modo completo con circuiti funzionali per forza, coordinazione e resistenza.",
             level: "Avanzato",
             price: "44.99",
-            image: "/assets/courses/functional.jpg"
+            image: functionalImg
         },
         {
             id: 5,
@@ -41,7 +47,7 @@ export default function CoursesPage() {
             description: "Spingi i tuoi limiti con workout intensi e mirati a potenza, forza e resistenza globale.",
             level: "Avanzato",
             price: "49.99",
-            image: "/assets/courses/crossfit.jpg"
+            image: crossfitImg
         },
         {
             id: 6,
@@ -49,7 +55,7 @@ export default function CoursesPage() {
             description: "Allenamento a corpo libero focalizzato su postura, stabilità e tonificazione profonda.",
             level: "Intermedio",
             price: "32.99",
-            image: "/assets/courses/pilates.jpg"
+            image: pilatesImg
         }
     ];
 
