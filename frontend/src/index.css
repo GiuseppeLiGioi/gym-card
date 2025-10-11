@@ -942,6 +942,129 @@ ol {
   margin-bottom: 0.2rem;
 }
 
+/* ====== BANNER ====== */
+.courses-hero {
+  width: 100%;
+  max-height: 460px; 
+  overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; 
+  object-position: center;
+  filter: brightness(0.6);
+}
+
+/* ====== CONTAINER CORSI ====== */
+.container-courses {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ====== SINGOLO CORSO ====== */
+.container-single-course {
+  display: flex;
+  flex-direction: column;
+  background-color: #2c2c2c;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container-single-course:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(245, 166, 35, 0.4);
+}
+
+/* HEADER CORSO */
+.container-course-header {
+  padding: 1rem;
+}
+
+.title-course {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f5a623;
+  margin-bottom: 0.5rem;
+}
+
+.description-course {
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.3;
+}
+
+/* IMMAGINE CORSO */
+.container-course-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.container-course-center img {
+  width: 480px;
+  height: 390px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-course-center img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(245, 166, 35, 0.5);
+}
+
+/* BOTTOM INFO */
+.container-course-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.level-course {
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.price-course {
+  font-weight: 700;
+  color: #f5a623;
+}
+
+/* BUTTON ISCRIVITI */
+.btn-course {
+  width: calc(100% - 2rem);
+  margin: 0 1rem 1rem 1rem;
+  padding: 0.75rem 0;
+  background-color: #f5a623;
+  color: #1a1a1a;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-course:hover {
+  background-color: #d18b1f;
+  transform: scale(1.02);
+}
+
+
 
 
 /* Media query TABLET */
@@ -1038,13 +1161,13 @@ ol {
     padding: 1.5rem;
   }
 
- 
+
 
   .container-info-bottom-exercise {
     gap: 0.8rem;
   }
 
-   .image-exercise {
+  .image-exercise {
     max-width: 250px;
   }
 
@@ -1071,6 +1194,49 @@ ol {
   .container-single-exercise {
     gap: 1rem;
   }
+
+  .container-courses {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+
+  /* Singolo corso */
+  .container-single-course {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .container-course-center img {
+    width: 550px;
+    height: 470px;
+  }
+
+
+  .title-course {
+    font-size: 1.5rem;
+  }
+
+  .description-course {
+    font-size: 1rem;
+  }
+
+ 
+  .level-course,
+  .price-course {
+    font-size: 1rem;
+  }
+
+  .btn-course {
+    padding: 0.85rem 0;
+    font-size: 1rem;
+  }
+
+  .courses-hero {
+  max-height: 630px;
+  margin-bottom: 50px;
+}
 
 
 
@@ -1162,10 +1328,12 @@ ol {
   .container-info-exercise {
     padding: 2rem;
   }
+
   .container-info-bottom-exercise {
     gap: 1rem;
   }
-   .image-exercise {
+
+  .image-exercise {
     max-width: 300px;
   }
 
@@ -1180,7 +1348,7 @@ ol {
     min-width: 100px;
   }
 
- 
+
 
   .btn-complete-exercise {
     font-size: 1.3rem;
@@ -1194,4 +1362,54 @@ ol {
   .container-single-exercise {
     gap: 1.2rem;
   }
+
+  .container-courses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+
+  /* Singolo corso */
+  .container-single-course {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .container-course-center img {
+    width: 650px;
+    height: 500px;
+  }
+
+  
+  .title-course {
+    font-size: 2.0rem;
+  }
+
+  .description-course {
+    font-size: 1.5rem;
+  }
+
+  
+  .level-course,
+  .price-course {
+    font-size: 1.5rem;
+  }
+
+ 
+  .btn-course {
+    padding: 1rem 0;
+    font-size: 1rem;
+  }
+
+  .courses-hero {
+  max-height: 900px;
+  margin-bottom: 60px;
+}
+
+  
+
+  
+
+  
 }

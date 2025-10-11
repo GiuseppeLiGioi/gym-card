@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom"
-import bodybuildingImg from '../images/courses/bodybuilding.jpg';
-import cardioImg from '../images/courses/cardio.jpg';
-import yogaImg from '../images/courses/yoga.jpg';
-import functionalImg from '../images/courses/functional.jpg';
-import crossfitImg from '../images/courses/crossfit.jpg';
-import pilatesImg from '../images/courses/pilates.jpg';
+import bodybuildingImg from "../../images/courses/bodybuilding.jpg";
+import cardioImg from "../../images/courses/cardio.jpg";
+import yogaImg from "../../images/courses/yoga.jpg";
+import functionalImg from "../../images/courses/functional.jpg";
+import crossfitImg from "../../images/courses/crossfit.jpg";
+import pilatesImg from "../../images/courses/pilates.jpg";
+import bannerImg from '../../images/courses/banner.png';
+
+
 
 export default function CoursesPage() {
     const navigate = useNavigate()
@@ -12,7 +15,7 @@ export default function CoursesPage() {
         {
             id: 1,
             title: "Bodybuilding Base",
-            description: "Impara le fondamenta dell’allenamento con i pesi e costruisci forza in modo sicuro ed efficace.",
+            description: "Impara le fondamenta dell’allenamento con i pesi e costruisci forza in modo sicuro.",
             level: "Principiante",
             price: "39.99",
             image: bodybuildingImg
@@ -64,15 +67,9 @@ export default function CoursesPage() {
         <>
 
             <section className="courses-hero">
-                <div className="hero-overlay">
-                    <div className="hero-content">
-                        <h1 className="hero-title">Scopri i nostri corsi</h1>
-                        <p className="hero-subtitle">
-                            Scegli il percorso che fa per te e inizia subito a migliorarti.
-                        </p>
-                    </div>
-                </div>
+                <img src={bannerImg} alt="Banner corsi" className="banner-img" />
             </section>
+
 
             <div className="container-courses">
                 {
