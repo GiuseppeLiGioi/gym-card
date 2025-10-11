@@ -8,7 +8,7 @@ import ProgressPage from "./assets/Pages/ProgressPage"
 import SingleSheetPage from "./assets/Pages/SingleSheetPage"
 import Header from "./assets/Components/Header"
 import PlansPage from "./assets/Pages/PlansPage"
-import CoursesPage from "./assets/Pages/CoursesPage"
+import CoursesPage from "./assets/Pages/Coursespage"
 import CheckOutPage from "./assets/Pages/CheckOutPage"
 function App() {
   
