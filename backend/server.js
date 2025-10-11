@@ -3,7 +3,7 @@ const cors = require('cors');
 const authRouter = require('./routers/authRouter')
 const progressRouter = require('./routers/progressRouter')
 const sheetsRouter = require('./routers/sheetsRouter')
-
+const paymentsRoute = require('./controllers/paymentsController.js')
 const connection = require('./data/db')
 const port = process.env.PORT || 5000;
 const express = require('express')
@@ -24,6 +24,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json())
+
+app.use("/api/payments", paymentsRoute);
 
 app.use('/auth', authRouter)
 app.use('/sheets', sheetsRouter)
