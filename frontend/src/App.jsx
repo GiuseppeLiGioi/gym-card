@@ -9,6 +9,7 @@ import SingleSheetPage from "./assets/Pages/SingleSheetPage"
 import Header from "./assets/Components/Header"
 import PlansPage from "./assets/Pages/PlansPage"
 import CoursesPage from "./assets/Pages/CoursesPage"
+import CheckOutPage from "./assets/Pages/CheckOutPage"
 function App() {
   
 
@@ -75,6 +76,12 @@ function App() {
       <Route path="/sheets/:sheetId/progress" element={
         <ProtectedRoute>
           <ProgressPage />
+        </ProtectedRoute>
+        }/>
+
+        <Route path="/checkout" element={
+        <ProtectedRoute>
+          <CheckOutPage />
         </ProtectedRoute>
         }/>
 

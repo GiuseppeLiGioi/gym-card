@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom"
+
 export default function CoursesPage() {
+    const navigate = useNavigate()
     const coursesData = [
         {
             id: 1,
@@ -66,7 +69,28 @@ export default function CoursesPage() {
             </section>
 
             <div className="container-courses">
+                {
+                    coursesData.map((c) => (
+                        <div className="container-single-course" key={c.id}>
+                            <div className="container-course-header">
+                                <h2 className="title-course">{c.title}</h2>
+                                <p className="description-course">{c.description}</p>
+                            </div>
 
+                            <div className="container-course-center">
+                                <img src={c.image} alt={`Corso ${c.title}`} />
+                            </div>
+
+                            <div className="container-course-bottom">
+                                <p className="level-course">{c.level}</p>
+                                <p className="price-course">{c.price}</p>
+                            </div>
+                            <button className="btn-course" onClick={() => navigate('/checkout', { state: { course: c } })}
+                            >Iscriviti
+                            </button>
+                        </div>
+                    ))
+                }
             </div>
         </>
 
