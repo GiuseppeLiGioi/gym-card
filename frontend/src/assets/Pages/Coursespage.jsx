@@ -1,7 +1,9 @@
 export default function CoursesPage() {
 
-    
+
     return (
+        <>
+        
         <section className="courses-hero">
             <div className="hero-overlay">
                 <div className="hero-content">
@@ -12,6 +14,11 @@ export default function CoursesPage() {
                 </div>
             </div>
         </section>
+
+        <div className="container-courses">
+
+        </div>
+        </>
 
     )
 }
