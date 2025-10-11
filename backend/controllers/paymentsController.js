@@ -1,35 +1,58 @@
 const express = require('express');
+const connection = require('../data/db');
+const { promisify } = require('util');
+
 const Stripe = require('stripe')
-const router = express.Router();
+
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-const payments = {
-    createPayment: (req, res) => {
+
+console.log("🔑 Stripe key:", process.env.STRIPE_SECRET_KEY);
+const paymentsController = {
+    createPayment: async (req, res) => {
         const userId = req.user.userId;
         const { itemId, itemType, title, amount, currency } = req.body;
 
-        // Validazioni base
         if (!itemId || !itemType || !title || !amount || !currency) {
             return res.status(400).json({ error: "Dati mancanti per il pagamento" });
         }
 
-        // Inserimento nel DB con status pending
+        console.log("🟢 Creazione pagamento per utente:", userId, req.body);
         const insertQuery = `
-        INSERT INTO payments (user_id, item_id, item_type, title, amount, currency, status, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW())
-    `;
+  INSERT INTO payments (user_id, product_name, amount, status, payment_intent_id, created_at)
+  VALUES (?, ?, ?, 'pending', NULL, NOW())
+`;
 
-        connection.query(insertQuery, [userId, itemId, itemType, title, amount, currency], (err, results) => {
-            if (err) return res.status(500).json({ error: err.message });
-
+        try {
+            const query = promisify(connection.query).bind(connection);
+            const results = await query(insertQuery, [userId, title, Math.round(amount)]);
             const paymentId = results.insertId;
 
-            // Qui chiamerai Stripe per creare PaymentIntent/Checkout Session
-            // Poi ritorni al frontend client_secret o url
-        });
+            const session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                mode: 'payment',
+                line_items: [{
+                    price_data: {
+                        currency: currency,
+                        product_data: { name: title },
+                        unit_amount: Math.round(amount),
+                    },
+                    quantity: 1
+                }],
+                metadata: { userId, paymentId },
+                success_url: `${process.env.FRONTEND_APP}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${process.env.FRONTEND_APP}/checkout/cancel`
+            });
+
+            res.status(200).json({ url: session.url });
+
+        } catch (err) {
+            console.error("❌ ERRORE PAYMENT:", err);
+            res.status(500).json({ error: "Errore nel processo di pagamento" });
+        }
+
     }
+};
 
-}
-
-module.exports = router;
+module.exports = paymentsController;
