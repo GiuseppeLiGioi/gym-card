@@ -8,7 +8,7 @@ const Stripe = require('stripe')
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-console.log("🔑 Stripe key:", process.env.STRIPE_SECRET_KEY);
+
 const paymentsController = {
     createPayment: async (req, res) => {
         const userId = req.user.userId;
@@ -18,7 +18,7 @@ const paymentsController = {
             return res.status(400).json({ error: "Dati mancanti per il pagamento" });
         }
 
-        console.log("🟢 Creazione pagamento per utente:", userId, req.body);
+        
         const insertQuery = `
   INSERT INTO payments (user_id, product_name, amount, status, payment_intent_id, created_at)
   VALUES (?, ?, ?, 'pending', NULL, NOW())
