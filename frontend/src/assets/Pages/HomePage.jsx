@@ -8,16 +8,14 @@ import { useGlobalContext } from '../contexts/GlobalContext';
 import CreateSheetModal from '../Components/CreateSheetModal';
 import ConfirmModal from '../Components/ConfirmModal';
 
-
-
-
 export default function HomePage() {
     const [showModal, setShowModal] = useState(false)
     const [sheets, setSheets] = useState([])
-    const [currentSheet, setCurrentSheet] = useState({})
+    const [currentSheet, setCurrentSheet] = useState(null) // inizializzato a null
     const { setLoading, fetchWithAuth, token, loading } = useGlobalContext()
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const navigate = useNavigate()
+
     function onClose() {
         setShowModal(false)
     }
@@ -26,7 +24,7 @@ export default function HomePage() {
         setLoading(true);
         try {
             if (currentSheet?.id) {
-                // UPDATE (solo se è presente un id scheda)
+                // UPDATE
                 const res = await fetchWithAuth(`/sheets/${currentSheet.id}`, {
                     method: 'PUT',
                     body: JSON.stringify({ title: titleSheet, theme: themeSheet })
@@ -35,9 +33,8 @@ export default function HomePage() {
 
                 setSheets(prev => prev.map(s => s.id === currentSheet.id ? { ...s, title: titleSheet, theme: themeSheet } : s));
 
-                
             } else {
-                // CREATE (se non è presente id scheda, fa la create)
+                // CREATE
                 const res = await fetchWithAuth('/sheets', {
                     method: 'POST',
                     body: JSON.stringify({ title: titleSheet, theme: themeSheet })
@@ -58,53 +55,43 @@ export default function HomePage() {
         }
     }
 
+    async function deleteSheet(sheetId) {
+        setLoading(true);
 
-async function deleteSheet(sheetId) {
-  setLoading(true);
+        try {
+            console.log("Eliminazione scheda con ID:", sheetId);
 
-  try {
-    console.log("Eliminazione scheda con ID:", sheetId);
+            const res = await fetchWithAuth(`/sheets/${sheetId}`, { method: 'DELETE' });
 
-    const res = await fetchWithAuth(`/sheets/${sheetId}`, {
-      method: 'DELETE'
-    });
+            console.log("Status:", res.status);
 
-    console.log("Status:", res.status);
+            if (!res.ok) {
+                const errText = await res.text();
+                console.error("Errore dal server:", errText);
+                throw new Error("Errore nell'eliminare la scheda");
+            }
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("Errore dal server:", errText);
-      throw new Error("Errore nell'eliminare la scheda");
+            const data = await res.json();
+            console.log("Risposta eliminazione:", data);
+
+            setSheets(prev => prev.filter((p) => p.id !== sheetId));
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Errore nell'eliminazione della scheda");
+        } finally {
+            setLoading(false);
+        }
     }
-
-    const data = await res.json();
-    console.log("Risposta eliminazione:", data);
-
-    setSheets(prev => prev.filter((p) => p.id !== sheetId));
-
-  } catch (error) {
-    console.error(error);
-    toast.error("Errore nell'eliminazione della scheda");
-  } finally {
-    setLoading(false);
-  }
-}
-
-
-
 
     async function fetchSheets() {
         setLoading(true)
-
         try {
             const res = await fetchWithAuth('/sheets', { method: 'GET' })
             if (!res.ok) throw new Error("Errore nel caricamento delle schede");
 
-
             const data = await res.json()
-
             setSheets(data.sheets || data || [])
-
 
         } catch (error) {
             console.error(error)
@@ -120,50 +107,44 @@ async function deleteSheet(sheetId) {
 
     return (
         <>
-        {loading && <Spinner />}
+            {loading && <Spinner />}
 
             <div className="container-homepage">
                 <h1 className="title-home">LE TUE SCHEDE</h1>
-                <button className='btn-plus' type='button' onClick={() => { setShowModal(true), setCurrentSheet(null) }}>
-                    {<FontAwesomeIcon icon={faPlus} />}
+                <button className='btn-plus' type='button' onClick={() => { setShowModal(true); setCurrentSheet(null) }}>
+                    <FontAwesomeIcon icon={faPlus} />
                 </button>
             </div>
 
-
             <div className='container-sheets'>
-                {
-                    sheets.map((s) => (
-                        <div className='container-single-sheet' key={s.id}>
-                            <div className='container-info-sheet'>
-                                <h2 className='title-sheet'>{s.title}</h2>
-                                <h4 className='theme-sheet'>{s.theme}</h4>
-                            </div>
-
-                            <div className='container-button-sheet'>
-
-                                <button type='button' className='btn-sheet' onClick={() => {
-                                    setCurrentSheet(s);
-                                    setShowModal(true);
-                                }}>
-                                    Modifica</button>
-
-                                <button
-                                    type='button'
-                                    className='btn-sheet green'
-                                    onClick={() => navigate(`/sheets/${s.id}`, {state: {title: s.title, theme: s.theme}})}
-                                >
-                                    Apri
-                                </button>
-
-                                <button type='button' className='btn-sheet' onClick={() => {
-                                    setCurrentSheet(s.id);
-                                    setShowConfirmModal(true);
-                                }}>
-                                    Elimina</button>
-                            </div>
+                {sheets.map((s) => (
+                    <div className='container-single-sheet' key={s.id}>
+                        <div className='container-info-sheet'>
+                            <h2 className='title-sheet'>{s.title}</h2>
+                            <h4 className='theme-sheet'>{s.theme}</h4>
                         </div>
-                    ))
-                }
+
+                        <div className='container-button-sheet'>
+                            <button type='button' className='btn-sheet' onClick={() => {
+                                setCurrentSheet(s);
+                                setShowModal(true);
+                            }}>
+                                Modifica
+                            </button>
+
+                            <button type='button' className='btn-sheet green' onClick={() => navigate(`/sheets/${s.id}`, { state: { title: s.title, theme: s.theme } })}>
+                                Apri
+                            </button>
+
+                            <button type='button' className='btn-sheet' onClick={() => {
+                                setCurrentSheet(s); // passa sempre l’oggetto completo
+                                setShowConfirmModal(true);
+                            }}>
+                                Elimina
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
 
             <CreateSheetModal
@@ -178,14 +159,12 @@ async function deleteSheet(sheetId) {
                 showModal={showConfirmModal}
                 onClose={() => setShowConfirmModal(false)}
                 onConfirm={() => {
-                    deleteSheet(currentSheet);
+                    deleteSheet(currentSheet.id); // usa l’ID
                     setShowConfirmModal(false);
                 }}
                 title="Conferma eliminazione Scheda"
                 message="Sei sicuro di voler eliminare questa scheda?"
             />
         </>
-
-
     )
 }
