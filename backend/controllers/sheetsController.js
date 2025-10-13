@@ -55,7 +55,7 @@ const sheetsController = {
     toggleCompleted: (req, res) => {
         const userId = req.user.userId;
         const idSheet = req.params.id;
-        const { completed } = req.body; // true o false
+        const { completed } = req.body;
 
         const updateCompletedQuery = `
         UPDATE workout_sheets
