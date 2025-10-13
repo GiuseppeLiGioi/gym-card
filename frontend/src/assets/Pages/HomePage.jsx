@@ -33,6 +33,7 @@ export default function HomePage() {
                 if (!res.ok) throw new Error("Errore nell'aggiornare la scheda");
 
                 setSheets(prev => prev.map(s => s.id === currentSheet.id ? { ...s, title: titleSheet, theme: themeSheet } : s));
+                toast.success("Scheda modificata con successo")
 
             } else {
                 // CREATE
@@ -43,6 +44,7 @@ export default function HomePage() {
                 if (!res.ok) throw new Error("Errore nel creare la scheda");
                 const data = await res.json();
                 setSheets(prev => [...prev, { id: data.sheetId, title: titleSheet, theme: themeSheet }]);
+                toast.success("Scheda creata con successo")
             }
 
             setShowModal(false);
@@ -72,10 +74,8 @@ export default function HomePage() {
                 throw new Error("Errore nell'eliminare la scheda");
             }
 
-            const data = await res.json();
-            console.log("Risposta eliminazione:", data);
-
             setSheets(prev => prev.filter((p) => p.id !== sheetId));
+            toast.success("Scheda eliminata con successo")
 
         } catch (error) {
             console.error(error);

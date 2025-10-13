@@ -2,12 +2,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons'
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
 const [menuOpen, setMenuOpen] = useState(false)
 
 const location = useLocation()
 const isLoginPage = location.pathname === "/login"
+
+const navigate = useNavigate()
 
 function toggleMenu(){
 setMenuOpen(!menuOpen)
@@ -16,7 +19,7 @@ setMenuOpen(!menuOpen)
         <div className="container-header">
             <div className="container-header-inner">
                 <button className='btn-user'><FontAwesomeIcon icon={faUser} /></button>
-                <h1 className='title-header'>PULSEFIT</h1>
+                <h1 className='title-header' onClick={() => navigate('/home')}>PULSEFIT</h1>
                 <button className='btn-hamburger' onClick={toggleMenu}><FontAwesomeIcon icon={faBars} /></button>
 
                 <nav className={`navbar ${menuOpen ? "" : "apri"}`}>

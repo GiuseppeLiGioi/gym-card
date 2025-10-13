@@ -180,6 +180,7 @@ ol {
 
 .title-header {
   font-size: 1.8rem;
+  cursor: pointer;
   font-weight: 700;
   letter-spacing: 1px;
   color: #f5a623;
