@@ -73,7 +73,7 @@ function App() {
         </ProtectedRoute>
        }/>
 
-      <Route path="/sheets/:sheetId/progress" element={
+      <Route path="/user" element={
         <ProtectedRoute>
           <ProgressPage />
         </ProtectedRoute>

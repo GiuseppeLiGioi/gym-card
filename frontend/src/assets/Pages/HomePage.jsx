@@ -1,6 +1,6 @@
 import Spinner from "../Components/Spinner";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -92,7 +92,8 @@ export default function HomePage() {
             if (!res.ok) throw new Error("Errore nel caricamento delle schede");
 
             const data = await res.json()
-            setSheets(data.sheets || data || [])
+            setSheets((data.sheets || data || []).map(s => ({ ...s, completed: false })));
+
 
         } catch (error) {
             console.error(error)
@@ -100,6 +101,11 @@ export default function HomePage() {
             setTimeout(() => setLoading(false), 300);
         }
     }
+
+    function markSheetCompleted(sheetId) {
+        setSheets(prev => prev.map(s => s.id === sheetId ? { ...s, completed: true } : s));
+    }
+
 
     useEffect(() => {
         if (!token) return;
@@ -124,9 +130,22 @@ export default function HomePage() {
             <div className='container-sheets'>
                 {sheets.map((s) => (
                     <div className='container-single-sheet' key={s.id}>
-                        <div className='container-info-sheet'>
-                            <h2 className='title-sheet'>{s.title}</h2>
-                            <h4 className='theme-sheet'>{s.theme}</h4>
+                        <div className="container-header-sheet">
+
+                            <div className='container-info-sheet'>
+                                <h2 className='title-sheet'>{s.title}</h2>
+                                <h4 className='theme-sheet'>{s.theme}</h4>
+                            </div>
+                            <div className="container-completed-sheet">
+                                <button
+                                    className={`btn-complete-sheet ${s.completed ? 'completed' : ''}`}
+                                    onClick={() => {
+                                        markSheetCompleted(s.id)
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faCircleCheck} />
+                                </button>
+                            </div>
                         </div>
 
                         <div className='container-button-sheet'>
