@@ -33,7 +33,11 @@ export default function SingleSheetPage() {
             if (imageFile instanceof File) formData.append("image", imageFile);
             else if (imageURL) formData.append("image_url", imageURL);
 
-            const res = await fetch(`http://localhost:5000/sheets/${sheetId}/exercises`, {
+            const url = currentExercise?.id
+                ? `http://localhost:5000/sheets/${sheetId}/exercises/${currentExercise.id}`
+                : `http://localhost:5000/sheets/${sheetId}/exercises`;
+
+            const res = await fetch(url, {
                 method: currentExercise?.id ? "PUT" : "POST",
                 body: formData,
                 headers: {
@@ -46,6 +50,12 @@ export default function SingleSheetPage() {
             setExercises(prev => currentExercise?.id ? prev.map(e => e.id === currentExercise.id ? { ...e, ...data } : e) : [...prev, data]);
             setCurrentExercise(null);
             setShowExerciseModal(false);
+
+            if (currentExercise?.id) {
+                return toast.success("Esercizio modificato con successo")
+            } else {
+                return toast.success("Esercizio creato con successo")
+            }
         } catch (error) {
             console.error(error);
             toast.error("Non è stato possibile completare l'operazione");
@@ -252,7 +262,7 @@ export default function SingleSheetPage() {
                                     className="image-exercise"
                                     src={e.image ? `http://localhost:5000${e.image}` : "/placeholder.png"}
                                     alt={e.name}
-                                 />
+                                />
 
 
                                 <div className="container-info-bottom-exercise">
@@ -295,9 +305,9 @@ export default function SingleSheetPage() {
                 showExerciseModal={showExerciseModal}
                 onClose={() => setShowExerciseModal(false)}
                 onSave={handleSave}
-
                 modalTitle={currentExercise?.id ? 'MODIFICA ESERCIZIO' : 'AGGIUNGI ESERCIZIO'}
                 modalMessage={currentExercise?.id ? 'Modifica il titolo e il tema dell esercizio' : 'Inserisci il titolo ed il tema dell esercizio'}
+                currentExercise={currentExercise}
             />
 
         </>

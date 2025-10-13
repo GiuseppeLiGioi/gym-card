@@ -1,13 +1,38 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
-export default function CreateExercisesModal({ showExerciseModal, onClose, onSave, modalTitle, modalMessage }) {
+export default function CreateExercisesModal({ showExerciseModal, onClose, onSave, modalTitle, modalMessage, currentExercise }) {
     const [titleExercise, setTitleExercise] = useState("")
     const [setsExercise, setSetsExercise] = useState(0)
     const [repsExercise, setRepsExercise] = useState(0)
     const [weightExercise, setWeightExercise] = useState(0)
     const [imageExercise, setImageExercise] = useState("")
     const [imageExerciseUrl, setImageExerciseUrl] = useState("")
+
+
+    useEffect(() => {
+        if (currentExercise && showExerciseModal) {
+            setTitleExercise(currentExercise.name || "")
+            setSetsExercise(currentExercise.sets || "")
+            setRepsExercise(currentExercise.reps || "")
+            setWeightExercise(currentExercise.weight || "")
+            setImageExercise(currentExercise.image || "")
+            setImageExerciseUrl(currentExercise.image_url || "")
+        }
+
+    }, [currentExercise, showExerciseModal])
+
+    useEffect(() => {
+        if (!showExerciseModal) {
+            setTitleExercise("")
+            setSetsExercise("")
+            setRepsExercise("")
+            setWeightExercise("")
+            setImageExercise("")
+            setImageExerciseUrl("")
+        }
+
+    }, [showExerciseModal])
 
 
     return (
