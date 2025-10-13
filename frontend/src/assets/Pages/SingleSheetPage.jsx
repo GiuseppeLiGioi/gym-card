@@ -14,9 +14,10 @@ export default function SingleSheetPage() {
     const [showExerciseModal, setShowExerciseModal] = useState(false)
     const [currentExercise, setCurrentExercise] = useState(null)
     const [exercises, setExercises] = useState([])
-    const [sheet, setSheet] = useState(null)
     const [timer, setTimer] = useState(180)
-    const [intervalId, setIntervalId] = useState(null)
+
+
+
 
     const { sheetId } = useParams()
     const { fetchWithAuth, setLoading } = useGlobalContext()
@@ -90,7 +91,6 @@ export default function SingleSheetPage() {
 
 
             if (!exercisesArray || exercisesArray.length === 0) {
-                toast.info("Ancora nessun esercizio creato");
                 setExercises([]);
                 return;
             }
@@ -233,6 +233,13 @@ export default function SingleSheetPage() {
                 </div>
 
             </div>
+
+            {!showExerciseModal && exercises.length === 0 &&(
+                <div className="no-exercises-message">
+                    <p className="noExercise-p">Ancora nessun esercizio creato</p>
+                </div>
+            )}
+
 
 
             <div className='container-exercise'>
