@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../contexts/GlobalContext';
 import CreateSheetModal from '../Components/CreateSheetModal';
 import ConfirmModal from '../Components/ConfirmModal';
+import bannerHome from '../../images/courses/bannerHome.png';
 
 export default function HomePage() {
     const [showModal, setShowModal] = useState(false)
@@ -109,6 +110,10 @@ export default function HomePage() {
         <>
             {loading && <Spinner />}
 
+
+            <section className="courses-hero-home">
+                <img src={bannerHome} alt="Banner abbonamenti" className="banner-img-home" />
+            </section>
             <div className="container-homepage">
                 <h1 className="title-home">LE TUE SCHEDE</h1>
                 <button className='btn-plus' type='button' onClick={() => { setShowModal(true); setCurrentSheet(null) }}>
