@@ -36,7 +36,7 @@ export const GlobalProvider = ({ children }) => {
 
     function updateUser(newUserData) {
         setUser(newUserData)
-        localStorage.setItem("gym_user", json.stringify(newUserData))
+        localStorage.setItem("gym_user", JSON.stringify(newUserData))
     }
 
 
