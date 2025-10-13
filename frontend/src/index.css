@@ -1249,6 +1249,160 @@ ol {
   color: #4caf50;
 }
 
+.progress-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: radial-gradient(circle at top, #161616 0%, #0b0b0b 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.progress-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f7b500;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px rgba(247, 181, 0, 0.6);
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* Messaggio se non ci sono schede */
+.no-sheets-msg {
+  font-size: 1.1rem;
+  margin-top: 3rem;
+  color: #b3b3b3;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* --- Card principale progressi --- */
+.progress-legend {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(247, 181, 0, 0.3);
+  border-radius: 20px;
+  padding: 1.8rem 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 0 20px rgba(247, 181, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: 2rem;
+  transition: all 0.3s ease;
+  animation: slideUp 0.6s ease forwards;
+}
+
+.progress-legend:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 0 25px rgba(247, 181, 0, 0.3);
+}
+
+/* --- Testi progress page --- */
+.p-progressPage {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fefefe;
+  margin-bottom: 1rem;
+}
+
+.p-progressPage:first-of-type {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #f7b500;
+  text-shadow: 0 0 6px rgba(247, 181, 0, 0.4);
+}
+
+/* --- Lista bonus --- */
+.progress-legend ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+.li-legend-progress {
+  font-size: 0.95rem;
+  color: #e5e5e5;
+  margin: 0.4rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.li-legend-progress::before {
+  content: "⚡";
+  position: absolute;
+  left: 0;
+  color: #f7b500;
+  font-size: 1.1rem;
+}
+
+.li-legend-progress:hover {
+  transform: translateX(4px);
+  color: #fff;
+}
+
+/* -------------------------------
+   ANIMAZIONI
+--------------------------------*/
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container-progress {
+  width: 100%;
+  max-width: 480px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 1.5rem auto;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #f7b500;
+  /* giallo dell'app */
+  border-radius: 999px;
+  transition: width 0.6s ease-in-out;
+}
+
+.progress-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+}
+
 
 
 
@@ -1466,6 +1620,32 @@ ol {
     padding: 0.7rem;
   }
 
+  .progress-title {
+    font-size: 2.2rem;
+  }
+
+  .progress-legend {
+    padding: 2.2rem;
+    max-width: 550px;
+  }
+
+  .p-progressPage {
+    font-size: 1.1rem;
+  }
+
+  .li-legend-progress {
+    font-size: 1.05rem;
+  }
+
+  .container-progress {
+    height: 30px;
+    max-width: 550px;
+  }
+
+  .progress-label {
+    font-size: 1.2rem;
+  }
+
 
 
 
@@ -1645,6 +1825,38 @@ ol {
     font-size: 1.05rem;
     padding: 0.8rem;
   }
+
+  .progress-page {
+    padding: 3rem 2rem;
+  }
+
+  .progress-title {
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .progress-legend {
+    padding: 2.8rem;
+    max-width: 650px;
+  }
+
+  .p-progressPage {
+    font-size: 1.15rem;
+  }
+
+  .li-legend-progress {
+    font-size: 1.1rem;
+  }
+
+   .container-progress {
+    height: 34px;
+    max-width: 550px;
+  }
+
+  .progress-label {
+    font-size: 1.4rem;
+  }
+
 
 
 

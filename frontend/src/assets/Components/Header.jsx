@@ -18,7 +18,7 @@ setMenuOpen(!menuOpen)
     return (
         <div className="container-header">
             <div className="container-header-inner">
-                <button className='btn-user'><FontAwesomeIcon icon={faUser} /></button>
+                <button className='btn-user' onClick={() => navigate('/user')}><FontAwesomeIcon icon={faUser} /></button>
                 <h1 className='title-header' onClick={() => navigate('/home')}>PULSEFIT</h1>
                 <button className='btn-hamburger' onClick={toggleMenu}><FontAwesomeIcon icon={faBars} /></button>
 

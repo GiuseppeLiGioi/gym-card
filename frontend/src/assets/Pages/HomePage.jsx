@@ -32,7 +32,7 @@ export default function HomePage() {
                 });
                 if (!res.ok) throw new Error("Errore nell'aggiornare la scheda");
 
-                setSheets(prev => prev.map(s => s.id === currentSheet.id ? { ...s, title: titleSheet, theme: themeSheet } : s));
+                setSheets(prev => prev.map(s => s.id === currentSheet.id ? { ...s, title: titleSheet, theme: themeSheet, completed: false } : s));
                 toast.success("Scheda modificata con successo")
 
             } else {
@@ -43,7 +43,7 @@ export default function HomePage() {
                 });
                 if (!res.ok) throw new Error("Errore nel creare la scheda");
                 const data = await res.json();
-                setSheets(prev => [...prev, { id: data.sheetId, title: titleSheet, theme: themeSheet }]);
+                setSheets(prev => [...prev, { id: data.sheetId, title: titleSheet, theme: themeSheet, completed: false }]);
                 toast.success("Scheda creata con successo")
             }
 
@@ -92,9 +92,7 @@ export default function HomePage() {
             if (!res.ok) throw new Error("Errore nel caricamento delle schede");
 
             const data = await res.json()
-            setSheets((data.sheets || data || []).map(s => ({ ...s, completed: false })));
-
-
+            setSheets(data.sheets || data || []);
         } catch (error) {
             console.error(error)
         } finally {
@@ -102,9 +100,26 @@ export default function HomePage() {
         }
     }
 
-    function markSheetCompleted(sheetId) {
-        setSheets(prev => prev.map(s => s.id === sheetId ? { ...s, completed: true } : s));
+async function markSheetCompleted(sheetId, currentCompleted) {
+    try {
+        const res = await fetchWithAuth(`/sheets/${sheetId}/completed`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed: !currentCompleted })
+        });
+
+        if (!res.ok) throw new Error("Errore nel completamento scheda");
+
+        setSheets(prev =>
+            prev.map(s => s.id === sheetId ? { ...s, completed: !currentCompleted } : s)
+        );
+    } catch (error) {
+        console.error(error);
+        toast.error("Errore nel completamento della scheda");
     }
+}
+
+
 
 
     useEffect(() => {
@@ -140,7 +155,8 @@ export default function HomePage() {
                                 <button
                                     className={`btn-complete-sheet ${s.completed ? 'completed' : ''}`}
                                     onClick={() => {
-                                        markSheetCompleted(s.id)
+                                        const sheet = sheets.find(sh => sh.id === s.id);
+                                        markSheetCompleted(s.id, sheet.completed)
                                     }}
                                 >
                                     <FontAwesomeIcon icon={faCircleCheck} />

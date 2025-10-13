@@ -17,7 +17,7 @@ const sheetsController = {
 
             res.status(201).json({
                 message: "Scheda allenamento creata con successo",
-                sheetId: "Id scheda :" + results.insertId
+                sheetId:  results.insertId
             })
         })
     },
@@ -29,7 +29,7 @@ const sheetsController = {
         connection.query(showQuery, [userId], (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
 
-           
+
             res.status(200).json({ sheets: results || [] });
         });
     },
@@ -51,6 +51,28 @@ const sheetsController = {
             res.status(200).json({ message: "scheda aggiornata con successo" })
         })
     },
+
+    toggleCompleted: (req, res) => {
+        const userId = req.user.userId;
+        const idSheet = req.params.id;
+        const { completed } = req.body; // true o false
+
+        const updateCompletedQuery = `
+        UPDATE workout_sheets
+        SET completed = ?
+        WHERE id = ? AND user_id = ?
+    `;
+
+        connection.query(updateCompletedQuery, [completed ? 1 : 0, idSheet, userId], (err, results) => {
+            if (err) return res.status(500).json({ error: err.message });
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: "Scheda non trovata o non associata all'utente" });
+            }
+
+            res.status(200).json({ message: "Stato completamento aggiornato", completed });
+        });
+    },
+
 
 
     deleteSheet: (req, res) => {

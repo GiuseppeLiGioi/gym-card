@@ -28,6 +28,9 @@ router.get('/', authMiddleware, sheetsController.showSheets)
 router.put('/:id', authMiddleware, sheetsController.editSheet)
 router.delete('/:id', authMiddleware, sheetsController.deleteSheet)
 
+router.put("/:id/completed", authMiddleware, sheetsController.toggleCompleted);
+
+
 router.post('/:sheetId/exercises', authMiddleware, upload.single('image'), exercisesController.createExercise)
 router.get('/:sheetId/exercises', authMiddleware, exercisesController.showExercise)
 router.put('/:sheetId/exercises/:exerciseId', authMiddleware, upload.single('image'), exercisesController.editExercise)
