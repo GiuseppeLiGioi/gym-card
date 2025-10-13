@@ -1,5 +1,7 @@
+import ProgressBar from "../Components/ProgressBar"
+
 export default function ProgressPage() {
     return(
-        <h2>sono progressPage</h2>
+        <ProgressBar progress={progress} />
     )
  }
