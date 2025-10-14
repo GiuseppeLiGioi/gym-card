@@ -22,9 +22,9 @@ L’obiettivo? Offrire un’esperienza completa e personalizzata, accessibile di
 
 | **Categoria** | **Tecnologie** |
 |----------------|----------------|
-| 🎨 **Frontend** | React.js, React Router, Context API, TailwindCSS, Toastify |
+| 🎨 **Frontend** | React.js, React Router, Context API, CSS, Toastify |
 | ⚙️ **Backend** | Node.js, Express.js |
-| 🗄️ **Database** | MySQL |
+| 🗄️ **Database** | MySQL, MYSQLWorkBench |
 | 🔐 **Auth** | JWT (JSON Web Token) |
 | 💳 **Pagamenti** | Stripe API |
 | 🧰 **Altri Tools** | Dotenv, Bcrypt, Cors |
