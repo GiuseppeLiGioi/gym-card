@@ -73,9 +73,14 @@ npm install
 ## 🧪 Credenziali di test per Stripe
 
 Email: qualsiasi email fittizia
+
 Carta: 4242 4242 4242 4242
+
 Data: qualsiasi futura
+
 CVC: 123
+
+
 
 ## 📈 Cosa ho imparato / ripassato
 
